@@ -34,7 +34,7 @@
   --bs-border-color: #b7d9c5;
 }
 
-header.navbar { background-color: #1b4332 !important; }
+header.navbar { background-color: #1b4332 !important; min-height: 110px; }
 
 .navbar-brand {
   background-color: rgba(0,0,0,.25);
