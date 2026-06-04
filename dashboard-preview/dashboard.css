@@ -88,3 +88,7 @@ thead tr { background-color: #c8e6d3; }
 .navbar .form-control {
   padding: .75rem 1rem;
 }
+
+.compat-matrix th { white-space: nowrap; }
+.compat-matrix .compat-k8s-col { width: 4rem; }
+.compat-yes { color: #2d6a4f; font-weight: 700; font-size: 1rem; background-color: #ebf5ef; }
