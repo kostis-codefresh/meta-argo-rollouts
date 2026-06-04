@@ -57,7 +57,17 @@
 .navbar-logo {
   width: 150px;
   height: auto;
-  margin-bottom: 6px;
+}
+
+.navbar-page-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  pointer-events: none;
 }
 
 /*
