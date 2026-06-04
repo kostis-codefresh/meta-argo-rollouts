@@ -21,6 +21,19 @@
   pointer-events: none;
 }
 
+@media (max-width: 767.98px) {
+  .navbar-page-title {
+    font-size: 1rem;
+    letter-spacing: 0;
+    left: 80px;
+    right: 88px;
+    transform: none;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
 /*
  * Sidebar
  */
@@ -30,9 +43,6 @@
     position: -webkit-sticky;
     position: sticky;
     top: 48px;
-  }
-  .navbar-search {
-    display: block;
   }
 }
 
@@ -85,9 +95,6 @@ thead tr { background-color: #c8e6d3; }
   box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
 }
 
-.navbar .form-control {
-  padding: .75rem 1rem;
-}
 
 .compat-matrix th { white-space: nowrap; }
 .compat-matrix .compat-k8s-col { width: 4rem; }
