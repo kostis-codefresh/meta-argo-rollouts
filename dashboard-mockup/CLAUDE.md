@@ -1,3 +1,7 @@
+# General
+
+- No Javascript is allowed. Only CSS animations and styles can be used
+
 # Color Palette & Structure
 
 - **Backgrounds:** Use `#ffffff` for cards/content panels, and a very soft gray like `#f8f9fa` or `#f1f3f4` for the main canvas background.

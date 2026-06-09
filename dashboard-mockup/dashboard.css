@@ -2,12 +2,21 @@ body {
     font-family: 'Roboto', sans-serif;
     background-color: #f1f3f4;
     color: #3c4043;
+    overflow-x: hidden;
+}
+
+/* ── Navbar ── */
+
+.navbar-logo {
+    height: 36px;
+    width: auto;
 }
 
 .gcp-navbar {
     background-color: #ffffff;
     border-bottom: 1px solid #dadce0;
     height: 48px;
+    z-index: 200;
 }
 
 .gcp-brand {
@@ -19,18 +28,54 @@ body {
     height: 36px;
 }
 
+/* ── Hamburger (hidden on desktop) ── */
+
+.sidebar-toggle-input {
+    display: none;
+}
+
+.hamburger-btn {
+    display: none;
+    cursor: pointer;
+    align-items: center;
+    padding: 4px;
+    border-radius: 4px;
+    margin-bottom: 0;
+}
+
+.hamburger-icon {
+    width: 24px;
+    height: 24px;
+    display: block;
+}
+
+/* ── Sidebar ── */
+
 .gcp-sidebar {
     background-color: #ffffff;
     border-right: 1px solid #dadce0;
     width: 256px;
     height: calc(100vh - 48px);
     position: fixed;
+    top: 48px;
+    left: 0;
+    z-index: 150;
+    transition: transform 0.25s ease;
 }
 
-.nav-link-active {
-    background-color: #e8f0fe;
-    color: #1a73e8 !important;
+/* ── Backdrop (hidden by default) ── */
+
+.sidebar-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    top: 48px;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 140;
+    cursor: pointer;
 }
+
+/* ── Cards ── */
 
 .gcp-card {
     background: #ffffff;
@@ -39,7 +84,45 @@ body {
     box-shadow: none;
 }
 
+.nav-link-active {
+    background-color: #e8f0fe;
+    color: #1a73e8 !important;
+}
+
+/* ── Main content ── */
+
 .main-content {
     margin-left: 256px;
     padding: 24px;
+}
+
+/* ── Responsive: tablet & mobile (< 768px) ── */
+
+@media (max-width: 767px) {
+    .hamburger-btn {
+        display: flex;
+    }
+
+    .gcp-search-wrapper {
+        display: none;
+    }
+
+    .gcp-sidebar {
+        transform: translateX(-256px);
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: 16px;
+    }
+
+    /* Sidebar open state */
+    .sidebar-toggle-input:checked ~ .gcp-sidebar {
+        transform: translateX(0);
+    }
+
+    /* Backdrop visible when sidebar open */
+    .sidebar-toggle-input:checked ~ .sidebar-backdrop {
+        display: block;
+    }
 }
