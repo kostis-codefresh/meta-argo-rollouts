@@ -4,44 +4,28 @@
     <meta charset="UTF-8">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Roboto', sans-serif; background-color: #f1f3f4; color: #3c4043; }
-        /* GCP Top Navbar */
-        .gcp-navbar { background-color: #ffffff; border-bottom: 1px solid #dadce0; height: 48px; }
-        /* GCP Left Sidebar */
-        .gcp-sidebar { background-color: #ffffff; border-right: 1px solid #dadce0; width: 256px; height: calc(100vh - 48px); position: fixed; }
-        /* Flat GCP style cards */
-        .gcp-card { background: #ffffff; border: 1px solid #dadce0; border-radius: 8px; box-shadow: none; }
-        .main-content { margin-left: 256px; padding: 24px; }
-    </style>
+    <link href="dashboard.css" rel="stylesheet">
 </head>
 <body>
 
     <nav class="navbar gcp-navbar sticky-top p-0 px-3 d-flex justify-content-between align-items-center">
         <div class="d-flex align-items-center">
-            <span class="fw-medium me-3" style="color: #1a73e8;">Google Cloud</span>
+            <span class="fw-medium me-3 gcp-brand">Google Cloud</span>
             <span class="text-muted small">My First Project</span>
         </div>
         <div class="w-50 mx-4">
-            <input type="search" class="form-control form-control-sm bg-light border-0" placeholder="Search resources, products, and docs" style="border-radius: 8px; height: 36px;">
+            <input type="search" class="form-control form-control-sm bg-light border-0 gcp-search" placeholder="Search resources, products, and docs">
         </div>
     </nav>
 
     <div class="gcp-sidebar p-3">
         <ul class="nav flex-column gap-1">
-            <li class="nav-item"><a class="nav-link text-dark active fw-medium p-2 rounded" href="index.html" style="background-color: #e8f0fe; color: #1a73e8 !important;">Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link text-dark active fw-medium p-2 rounded nav-link-active" href="index.html">Dashboard</a></li>
             <li class="nav-item"><a class="nav-link text-muted p-2" href="critical.html">Critical PRs</a></li>
             <li class="nav-item"><a class="nav-link text-muted p-2" href="ready.html">Ready PRs</a></li>
             <li class="nav-item"><a class="nav-link text-muted p-2" href="slow.html">Slow tests</a></li>
             <li class="nav-item"><a class="nav-link text-muted p-2" href="flaky.html">Flaky tests</a></li>
             <li class="nav-item"><a class="nav-link text-muted p-2" href="version.html">K8s versions</a></li>
-        </ul>
-        <h6 class="px-2 mt-4 mb-1 text-muted text-uppercase small fw-bold" style="font-size: 11px;">Saved reports</h6>
-        <ul class="nav flex-column gap-1">
-            <li class="nav-item"><a class="nav-link text-muted p-2" href="#">Current month</a></li>
-            <li class="nav-item"><a class="nav-link text-muted p-2" href="#">Last quarter</a></li>
-            <li class="nav-item"><a class="nav-link text-muted p-2" href="#">Social engagement</a></li>
-            <li class="nav-item"><a class="nav-link text-muted p-2" href="#">Year-end sale</a></li>
         </ul>
     </div>
 

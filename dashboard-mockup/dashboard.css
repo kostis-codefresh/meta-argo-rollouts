@@ -1,0 +1,45 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f1f3f4;
+    color: #3c4043;
+}
+
+.gcp-navbar {
+    background-color: #ffffff;
+    border-bottom: 1px solid #dadce0;
+    height: 48px;
+}
+
+.gcp-brand {
+    color: #1a73e8;
+}
+
+.gcp-search {
+    border-radius: 8px;
+    height: 36px;
+}
+
+.gcp-sidebar {
+    background-color: #ffffff;
+    border-right: 1px solid #dadce0;
+    width: 256px;
+    height: calc(100vh - 48px);
+    position: fixed;
+}
+
+.nav-link-active {
+    background-color: #e8f0fe;
+    color: #1a73e8 !important;
+}
+
+.gcp-card {
+    background: #ffffff;
+    border: 1px solid #dadce0;
+    border-radius: 8px;
+    box-shadow: none;
+}
+
+.main-content {
+    margin-left: 256px;
+    padding: 24px;
+}
