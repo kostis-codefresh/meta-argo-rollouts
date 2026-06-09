@@ -25,22 +25,29 @@
         <div class="w-50 mx-4">
             <input type="search" class="form-control form-control-sm bg-light border-0" placeholder="Search resources, products, and docs" style="border-radius: 8px; height: 36px;">
         </div>
-        <div><span class="badge bg-secondary rounded-circle p-2">U</span></div>
     </nav>
 
     <div class="gcp-sidebar p-3">
         <ul class="nav flex-column gap-1">
-            <li class="nav-item"><a class="nav-link text-dark active fw-medium p-2 rounded" href="#" style="background-color: #e8f0fe; color: #1a73e8 !important;">Dashboard</a></li>
-            <li class="nav-item"><a class="nav-link text-muted p-2" href="#">Activity</a></li>
-            <li class="nav-item"><a class="nav-link text-muted p-2" href="#">IAM & Admin</a></li>
-            <li class="nav-item"><a class="nav-link text-muted p-2" href="#">Compute Engine</a></li>
+            <li class="nav-item"><a class="nav-link text-dark active fw-medium p-2 rounded" href="index.html" style="background-color: #e8f0fe; color: #1a73e8 !important;">Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link text-muted p-2" href="critical.html">Critical PRs</a></li>
+            <li class="nav-item"><a class="nav-link text-muted p-2" href="ready.html">Ready PRs</a></li>
+            <li class="nav-item"><a class="nav-link text-muted p-2" href="slow.html">Slow tests</a></li>
+            <li class="nav-item"><a class="nav-link text-muted p-2" href="flaky.html">Flaky tests</a></li>
+            <li class="nav-item"><a class="nav-link text-muted p-2" href="version.html">K8s versions</a></li>
+        </ul>
+        <h6 class="px-2 mt-4 mb-1 text-muted text-uppercase small fw-bold" style="font-size: 11px;">Saved reports</h6>
+        <ul class="nav flex-column gap-1">
+            <li class="nav-item"><a class="nav-link text-muted p-2" href="#">Current month</a></li>
+            <li class="nav-item"><a class="nav-link text-muted p-2" href="#">Last quarter</a></li>
+            <li class="nav-item"><a class="nav-link text-muted p-2" href="#">Social engagement</a></li>
+            <li class="nav-item"><a class="nav-link text-muted p-2" href="#">Year-end sale</a></li>
         </ul>
     </div>
 
     <div class="main-content">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h4 class="mb-0 fw-normal">Project Info</h4>
-            <button class="btn btn-sm btn-outline-primary" style="border-radius: 4px;">Edit Project</button>
         </div>
 
         <div class="row g-3">
