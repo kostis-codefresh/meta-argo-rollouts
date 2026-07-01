@@ -28,9 +28,6 @@ go.work.sum
 # env file
 .env
 
-# release-fetcher cache
-cache/
-
 # Editor/IDE
 # .idea/
 # .vscode/
