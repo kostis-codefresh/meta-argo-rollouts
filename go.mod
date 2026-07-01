@@ -1,4 +1,4 @@
-module release-fetcher
+module github.com/kostis-codefresh/meta-argo-rollouts
 
 go 1.26.1
 

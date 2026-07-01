@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"os"
@@ -17,8 +16,7 @@ var workflowFiles = []string{
 	".github/workflows/e2e.yaml",
 }
 
-const cacheDir = "cache"
-const cacheFile = cacheDir + "/k8s-versions.json"
+const k8sVersionsCacheFile = "k8s-versions.json"
 
 // cachedRelease is the on-disk record for a single release, keyed by tag in the cache file.
 type cachedRelease struct {
@@ -30,32 +28,14 @@ type cachedRelease struct {
 // loadCache reads the k8s-versions cache from disk, returning an empty map on a cold
 // start (missing or unparseable file) rather than treating it as fatal.
 func loadCache() map[string]cachedRelease {
-	data, err := os.ReadFile(cacheFile)
-	if err != nil {
-		return map[string]cachedRelease{}
-	}
-	var cache map[string]cachedRelease
-	if err := json.Unmarshal(data, &cache); err != nil {
-		fmt.Fprintf(os.Stderr, "error parsing %s: %v\n", cacheFile, err)
-		return map[string]cachedRelease{}
-	}
+	cache := map[string]cachedRelease{}
+	loadFromCache(k8sVersionsCacheFile, &cache)
 	return cache
 }
 
 // saveCache writes the k8s-versions cache to disk, creating the cache directory if needed.
 func saveCache(cache map[string]cachedRelease) {
-	if err := os.MkdirAll(cacheDir, 0755); err != nil {
-		fmt.Fprintf(os.Stderr, "error creating %s: %v\n", cacheDir, err)
-		return
-	}
-	data, err := json.MarshalIndent(cache, "", "  ")
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "error encoding %s: %v\n", cacheFile, err)
-		return
-	}
-	if err := os.WriteFile(cacheFile, data, 0644); err != nil {
-		fmt.Fprintf(os.Stderr, "error writing %s: %v\n", cacheFile, err)
-	}
+	saveToCache(k8sVersionsCacheFile, cache)
 }
 
 // printReleasesWithK8sVersions lists every argoproj/argo-rollouts release along with

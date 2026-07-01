@@ -7,7 +7,7 @@
 *.dll
 *.so
 *.dylib
-release-fetcher
+meta-argo-rollouts
 
 # Test binary, built with `go test -c`
 *.test
