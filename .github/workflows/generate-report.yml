@@ -1,4 +1,4 @@
-name: Generate Version report
+name: Dashboard
 
 on:
   schedule:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   generate-report:
-    name: Generate Report
+    name: Create HTML pages
     runs-on: ubuntu-latest
 
     permissions:
@@ -23,7 +23,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v6.5.0
         with:
-          go-version: 1.23 # Specify the Go version you are using
+          go-version: 1.26 # Specify the Go version you are using
 
       # Step 3: Run the Go application
       - name: Run Go Application
