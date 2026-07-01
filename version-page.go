@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"strings"
+	"time"
 )
 
 const versionPageTemplate = "web/version.html.tpl"
@@ -22,7 +23,7 @@ type versionPageRow struct {
 
 // renderVersionPage copies the version page's static assets and renders
 // web/version.html.tpl with the given rows into docs/version.html.
-func renderVersionPage(rows []releaseRow) error {
+func renderVersionPage(rows []releaseRow, generatedAt time.Time) error {
 	if err := os.MkdirAll("docs/img", 0755); err != nil {
 		return fmt.Errorf("creating docs dir: %w", err)
 	}
@@ -66,7 +67,15 @@ func renderVersionPage(rows []releaseRow) error {
 	}
 	defer out.Close()
 
-	return tmpl.Execute(out, struct{ Rows []versionPageRow }{Rows: pageRows})
+	data := struct {
+		Rows        []versionPageRow
+		GeneratedAt string
+	}{
+		Rows:        pageRows,
+		GeneratedAt: generatedAt.UTC().Format("02 Jan 2006 15:04 MST"),
+	}
+
+	return tmpl.Execute(out, data)
 }
 
 // copyFile copies src to dst, overwriting dst if it already exists.

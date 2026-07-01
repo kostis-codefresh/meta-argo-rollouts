@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/google/go-github/v66/github"
 )
@@ -34,9 +35,10 @@ func main() {
 
 	ctx := context.Background()
 
+	generatedAt := time.Now()
 	rows := collectReleaseRows(ctx, client)
 	printReleaseRows(rows)
-	if err := renderVersionPage(rows); err != nil {
+	if err := renderVersionPage(rows, generatedAt); err != nil {
 		fmt.Fprintf(os.Stderr, "error rendering version page: %v\n", err)
 	}
 

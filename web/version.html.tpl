@@ -17,7 +17,7 @@
                 <img src="img/menu.svg" alt="Menu" class="hamburger-icon">
             </label>
             <span class="fw-medium me-3 gcp-brand">Argo Rollouts Meta</span>
-            <span class="text-muted small">09 Jun 2026 14:51 UTC</span>
+            <span class="text-muted small">{{.GeneratedAt}}</span>
         </div>
         <div>
             <img src="img/rollouts.png" alt="Argo Rollouts" class="navbar-logo">
