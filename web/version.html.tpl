@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="dashboard.css" rel="stylesheet">
+</head>
+<body>
+
+    <input type="checkbox" id="sidebar-toggle" class="sidebar-toggle-input">
+
+    <nav class="navbar gcp-navbar sticky-top p-0 px-3 d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+            <label for="sidebar-toggle" class="hamburger-btn me-3">
+                <img src="img/menu.svg" alt="Menu" class="hamburger-icon">
+            </label>
+            <span class="fw-medium me-3 gcp-brand">Argo Rollouts Meta</span>
+            <span class="text-muted small">09 Jun 2026 14:51 UTC</span>
+        </div>
+        <div>
+            <img src="img/rollouts.png" alt="Argo Rollouts" class="navbar-logo">
+        </div>
+    </nav>
+
+    <label for="sidebar-toggle" class="sidebar-backdrop"></label>
+
+    <div class="gcp-sidebar p-3">
+        <ul class="nav flex-column gap-1">
+            <li class="nav-item"><a class="nav-link text-muted p-2" href="index.html">Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link text-muted p-2" href="critical.html">Critical PRs</a></li>
+            <li class="nav-item"><a class="nav-link text-muted p-2" href="ready.html">Ready PRs</a></li>
+            <li class="nav-item"><a class="nav-link text-muted p-2" href="slow.html">Slow tests</a></li>
+            <li class="nav-item"><a class="nav-link text-muted p-2" href="flaky.html">Flaky tests</a></li>
+            <li class="nav-item"><a class="nav-link text-dark active fw-medium p-2 rounded nav-link-active" href="version.html">K8s versions</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="mb-0 fw-normal">K8s versions</h4>
+        </div>
+
+        <div class="row g-3">
+            <div class="col-12">
+                <div class="card gcp-card">
+                    <div class="gcp-table-header">
+                        <h6 class="text-muted text-uppercase small fw-bold mb-0">Kubernetes Version Support Matrix</h6>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="gcp-table">
+                            <thead>
+                                <tr>
+                                    <th>Argo Rollouts Version</th>
+                                    <th>Support Status</th>
+                                    <th>K8s Versions</th>
+                                    <th>Released</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {{range .Rows}}
+                                <tr>
+                                    <td>{{.Tag}}</td>
+                                    <td><span class="{{.SupportClass}}">&#9679; {{.SupportStatus}}</span></td>
+                                    <td>{{.VersionsDisplay}}</td>
+                                    <td>{{.PublishedAt}}</td>
+                                </tr>
+                            {{end}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

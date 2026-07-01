@@ -34,7 +34,11 @@ func main() {
 
 	ctx := context.Background()
 
-	printReleasesWithK8sVersions(ctx, client)
+	rows := collectReleaseRows(ctx, client)
+	printReleaseRows(rows)
+	if err := renderVersionPage(rows); err != nil {
+		fmt.Fprintf(os.Stderr, "error rendering version page: %v\n", err)
+	}
 
 	rateLimits, _, err := client.RateLimit.Get(ctx)
 	if err != nil {

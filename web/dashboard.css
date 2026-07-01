@@ -1,0 +1,185 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f1f3f4;
+    color: #3c4043;
+    overflow-x: hidden;
+}
+
+/* ── Navbar ── */
+
+.navbar-logo {
+    height: 36px;
+    width: auto;
+}
+
+.gcp-navbar {
+    background-color: #ffffff;
+    border-bottom: 1px solid #dadce0;
+    height: 48px;
+    z-index: 200;
+}
+
+.gcp-brand {
+    color: #1a73e8;
+}
+
+/* ── Hamburger (hidden on desktop) ── */
+
+.sidebar-toggle-input {
+    display: none;
+}
+
+.hamburger-btn {
+    display: none;
+    cursor: pointer;
+    align-items: center;
+    padding: 4px;
+    border-radius: 4px;
+    margin-bottom: 0;
+}
+
+.hamburger-icon {
+    width: 24px;
+    height: 24px;
+    display: block;
+}
+
+/* ── Sidebar ── */
+
+.gcp-sidebar {
+    background-color: #ffffff;
+    border-right: 1px solid #dadce0;
+    width: 256px;
+    height: calc(100vh - 48px);
+    position: fixed;
+    top: 48px;
+    left: 0;
+    z-index: 150;
+    transition: transform 0.25s ease;
+}
+
+/* ── Backdrop (hidden by default) ── */
+
+.sidebar-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    top: 48px;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 140;
+    cursor: pointer;
+}
+
+/* ── Cards ── */
+
+.gcp-card {
+    background: #ffffff;
+    border: 1px solid #dadce0;
+    border-radius: 8px;
+    box-shadow: none;
+}
+
+.nav-link-active {
+    background-color: #e8f0fe;
+    color: #1a73e8 !important;
+}
+
+.gcp-sidebar .nav-link {
+    border-radius: 4px;
+    transition: background-color 0.15s ease;
+}
+
+.gcp-sidebar .nav-link:not(.nav-link-active):hover {
+    background-color: rgba(60, 64, 67, 0.08);
+    color: #3c4043 !important;
+}
+
+/* ── Table ── */
+
+.gcp-table-header {
+    padding: 16px 16px 12px;
+    border-bottom: 1px solid #dadce0;
+}
+
+.gcp-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.gcp-table thead th {
+    padding: 12px 16px;
+    font-size: 11px;
+    font-weight: 500;
+    color: #5f6368;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #dadce0;
+    white-space: nowrap;
+}
+
+.gcp-table tbody td {
+    padding: 12px 16px;
+    color: #3c4043;
+    border-bottom: 1px solid #f1f3f4;
+    vertical-align: middle;
+}
+
+.gcp-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.gcp-table tbody tr {
+    transition: background-color 0.15s ease;
+}
+
+.gcp-table tbody tr:hover {
+    background-color: rgba(60, 64, 67, 0.08);
+}
+
+.gcp-table a {
+    color: #1a73e8;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.gcp-table a:hover {
+    text-decoration: underline;
+}
+
+.diff-add { color: #137333; }
+.diff-del { color: #c5221f; }
+
+/* ── Main content ── */
+
+.main-content {
+    margin-left: 256px;
+    padding: 24px;
+}
+
+/* ── Responsive: tablet & mobile (< 768px) ── */
+
+@media (max-width: 767px) {
+    .hamburger-btn {
+        display: flex;
+    }
+
+    .gcp-sidebar {
+        transform: translateX(-256px);
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: 16px;
+    }
+
+    /* Sidebar open state */
+    .sidebar-toggle-input:checked ~ .gcp-sidebar {
+        transform: translateX(0);
+    }
+
+    /* Backdrop visible when sidebar open */
+    .sidebar-toggle-input:checked ~ .sidebar-backdrop {
+        display: block;
+    }
+}

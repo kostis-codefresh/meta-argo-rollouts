@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="dashboard.css" rel="stylesheet">
+</head>
+<body>
+
+    <input type="checkbox" id="sidebar-toggle" class="sidebar-toggle-input">
+
+    <nav class="navbar gcp-navbar sticky-top p-0 px-3 d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+            <label for="sidebar-toggle" class="hamburger-btn me-3">
+                <img src="img/menu.svg" alt="Menu" class="hamburger-icon">
+            </label>
+            <span class="fw-medium me-3 gcp-brand">Argo Rollouts Meta</span>
+            <span class="text-muted small">09 Jun 2026 14:51 UTC</span>
+        </div>
+        <div>
+            <img src="img/rollouts.png" alt="Argo Rollouts" class="navbar-logo">
+        </div>
+    </nav>
+
+    <label for="sidebar-toggle" class="sidebar-backdrop"></label>
+
+    <div class="gcp-sidebar p-3">
+        <ul class="nav flex-column gap-1">
+            <li class="nav-item"><a class="nav-link text-dark active fw-medium p-2 rounded nav-link-active" href="index.html">Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link text-muted p-2" href="critical.html">Critical PRs</a></li>
+            <li class="nav-item"><a class="nav-link text-muted p-2" href="ready.html">Ready PRs</a></li>
+            <li class="nav-item"><a class="nav-link text-muted p-2" href="slow.html">Slow tests</a></li>
+            <li class="nav-item"><a class="nav-link text-muted p-2" href="flaky.html">Flaky tests</a></li>
+            <li class="nav-item"><a class="nav-link text-muted p-2" href="version.html">K8s versions</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="mb-0 fw-normal">Project Info</h4>
+        </div>
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="card gcp-card p-4">
+                    <h6 class="text-muted text-uppercase small fw-bold">Project Details</h6>
+                    <p class="mb-1"><strong>Project name:</strong> My Awesome App</p>
+                    <p class="mb-0"><strong>Project ID:</strong> unique-gcp-id-1234</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card gcp-card p-4">
+                    <h6 class="text-muted text-uppercase small fw-bold">APIs & Services</h6>
+                    <span class="text-success small">● All systems operational</span>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card gcp-card">
+                    <div class="gcp-table-header">
+                        <h6 class="text-muted text-uppercase small fw-bold mb-0">Critical Pull Requests</h6>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="gcp-table">
+                            <thead>
+                                <tr>
+                                    <th>PR</th>
+                                    <th>Author</th>
+                                    <th>Description</th>
+                                    <th>Date Opened</th>
+                                    <th>Size</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><a href="#">#3412</a></td>
+                                    <td>jessie-chou</td>
+                                    <td>Fix race condition in canary weight calculation</td>
+                                    <td>2024-05-28</td>
+                                    <td><span class="diff-add">+312</span> / <span class="diff-del">-87</span></td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#">#3398</a></td>
+                                    <td>marco-rossi</td>
+                                    <td>Rollback does not respect analysis failure threshold</td>
+                                    <td>2024-05-25</td>
+                                    <td><span class="diff-add">+54</span> / <span class="diff-del">-12</span></td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#">#3387</a></td>
+                                    <td>anika-patel</td>
+                                    <td>Panic on nil pointer in bluegreen promotion</td>
+                                    <td>2024-05-22</td>
+                                    <td><span class="diff-add">+28</span> / <span class="diff-del">-6</span></td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#">#3371</a></td>
+                                    <td>lars-eriksson</td>
+                                    <td>AnalysisRun stuck in running state after provider timeout</td>
+                                    <td>2024-05-18</td>
+                                    <td><span class="diff-add">+145</span> / <span class="diff-del">-33</span></td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#">#3360</a></td>
+                                    <td>priya-nair</td>
+                                    <td>Weight mismatch between Rollout spec and Istio VirtualService</td>
+                                    <td>2024-05-15</td>
+                                    <td><span class="diff-add">+203</span> / <span class="diff-del">-58</span></td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#">#3344</a></td>
+                                    <td>tom-bradley</td>
+                                    <td>Controller restarts when workload ref points to missing deployment</td>
+                                    <td>2024-05-11</td>
+                                    <td><span class="diff-add">+77</span> / <span class="diff-del">-19</span></td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#">#3331</a></td>
+                                    <td>yuki-tanaka</td>
+                                    <td>Anti-affinity rules ignored during canary scale-up</td>
+                                    <td>2024-05-09</td>
+                                    <td><span class="diff-add">+89</span> / <span class="diff-del">-24</span></td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#">#3318</a></td>
+                                    <td>fatima-al-zahra</td>
+                                    <td>Header-based routing breaks after stable promotion</td>
+                                    <td>2024-05-07</td>
+                                    <td><span class="diff-add">+41</span> / <span class="diff-del">-9</span></td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#">#3305</a></td>
+                                    <td>marco-rossi</td>
+                                    <td>Prometheus metric resolution fails with non-default port</td>
+                                    <td>2024-05-05</td>
+                                    <td><span class="diff-add">+116</span> / <span class="diff-del">-38</span></td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#">#3290</a></td>
+                                    <td>helen-warner</td>
+                                    <td>Datadog analysis ignores metric window on resume</td>
+                                    <td>2024-05-02</td>
+                                    <td><span class="diff-add">+63</span> / <span class="diff-del">-15</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

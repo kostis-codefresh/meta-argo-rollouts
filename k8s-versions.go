@@ -40,17 +40,24 @@ func saveCache(cache map[string]cachedRelease) {
 
 const releaseCount = 30
 
-// printReleasesWithK8sVersions lists the last 30 argoproj/argo-rollouts releases along
-// with the Kubernetes versions covered by each release's e2e test matrix. Releases
-// already present in the on-disk cache are printed from the cache instead of being
-// re-fetched.
-func printReleasesWithK8sVersions(ctx context.Context, client *github.Client) {
-	masterVersions := fetchK8sVersions(ctx, client, "master")
-	masterVersionStr := "(no k8s data)"
-	if len(masterVersions) > 0 {
-		masterVersionStr = "[" + strings.Join(masterVersions, ", ") + "]"
-	}
-	fmt.Printf("%s - %s (%s) %s\n", "master", "HEAD", "", masterVersionStr)
+// releaseRow is one entry (the master branch or a release) with its k8s test matrix.
+type releaseRow struct {
+	Tag         string
+	Name        string
+	PublishedAt string
+	K8sVersions []string
+}
+
+// collectReleaseRows fetches the master branch (always fresh, never cached) followed by
+// the last 30 argoproj/argo-rollouts releases (using the on-disk cache), returning one
+// row per entry with master first.
+func collectReleaseRows(ctx context.Context, client *github.Client) []releaseRow {
+	rows := []releaseRow{{
+		Tag:         "master",
+		Name:        "HEAD",
+		PublishedAt: "",
+		K8sVersions: fetchK8sVersions(ctx, client, "master"),
+	}}
 
 	opts := &github.ListOptions{PerPage: releaseCount}
 	releases, _, err := client.Repositories.ListReleases(ctx, "argoproj", "argo-rollouts", opts)
@@ -72,15 +79,23 @@ func printReleasesWithK8sVersions(ctx context.Context, client *github.Client) {
 			}
 			cache[tag] = entry
 		}
-
-		versionStr := "(no k8s data)"
-		if len(entry.K8sVersions) > 0 {
-			versionStr = "[" + strings.Join(entry.K8sVersions, ", ") + "]"
-		}
-		fmt.Printf("%s - %s (%s) %s\n", tag, entry.Name, entry.PublishedAt, versionStr)
+		rows = append(rows, releaseRow{Tag: tag, Name: entry.Name, PublishedAt: entry.PublishedAt, K8sVersions: entry.K8sVersions})
 	}
 
 	saveCache(cache)
+
+	return rows
+}
+
+// printReleaseRows prints one line per row, matching the previous console output format.
+func printReleaseRows(rows []releaseRow) {
+	for _, row := range rows {
+		versionStr := "(no k8s data)"
+		if len(row.K8sVersions) > 0 {
+			versionStr = "[" + strings.Join(row.K8sVersions, ", ") + "]"
+		}
+		fmt.Printf("%s - %s (%s) %s\n", row.Tag, row.Name, row.PublishedAt, versionStr)
+	}
 }
 
 // fetchK8sVersions returns the Kubernetes versions covered by the e2e test matrix

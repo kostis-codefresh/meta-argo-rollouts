@@ -1,0 +1,88 @@
+package main
+
+import (
+	"fmt"
+	"html/template"
+	"io"
+	"os"
+	"strings"
+)
+
+const versionPageTemplate = "web/version.html.tpl"
+const versionPageOutput = "docs/version.html"
+
+// versionPageRow is the presentation-shaped view of a releaseRow for the version page.
+type versionPageRow struct {
+	Tag             string
+	SupportStatus   string
+	SupportClass    string
+	VersionsDisplay string
+	PublishedAt     string
+}
+
+// renderVersionPage copies the version page's static assets and renders
+// web/version.html.tpl with the given rows into docs/version.html.
+func renderVersionPage(rows []releaseRow) error {
+	if err := os.MkdirAll("docs/img", 0755); err != nil {
+		return fmt.Errorf("creating docs dir: %w", err)
+	}
+	if err := copyFile("web/dashboard.css", "docs/dashboard.css"); err != nil {
+		return fmt.Errorf("copying dashboard.css: %w", err)
+	}
+	if err := copyFile("web/img/menu.svg", "docs/img/menu.svg"); err != nil {
+		return fmt.Errorf("copying menu.svg: %w", err)
+	}
+	if err := copyFile("web/img/rollouts.png", "docs/img/rollouts.png"); err != nil {
+		return fmt.Errorf("copying rollouts.png: %w", err)
+	}
+
+	pageRows := make([]versionPageRow, 0, len(rows))
+	for _, row := range rows {
+		versionsDisplay := "No data"
+		supportStatus := "No data"
+		supportClass := "text-muted"
+		if len(row.K8sVersions) > 0 {
+			versionsDisplay = strings.Join(row.K8sVersions, ", ")
+			supportStatus = "Supported"
+			supportClass = "diff-add"
+		}
+		pageRows = append(pageRows, versionPageRow{
+			Tag:             row.Tag,
+			SupportStatus:   supportStatus,
+			SupportClass:    supportClass,
+			VersionsDisplay: versionsDisplay,
+			PublishedAt:     row.PublishedAt,
+		})
+	}
+
+	tmpl, err := template.ParseFiles(versionPageTemplate)
+	if err != nil {
+		return fmt.Errorf("parsing %s: %w", versionPageTemplate, err)
+	}
+
+	out, err := os.Create(versionPageOutput)
+	if err != nil {
+		return fmt.Errorf("creating %s: %w", versionPageOutput, err)
+	}
+	defer out.Close()
+
+	return tmpl.Execute(out, struct{ Rows []versionPageRow }{Rows: pageRows})
+}
+
+// copyFile copies src to dst, overwriting dst if it already exists.
+func copyFile(src, dst string) error {
+	srcFile, err := os.Open(src)
+	if err != nil {
+		return err
+	}
+	defer srcFile.Close()
+
+	dstFile, err := os.Create(dst)
+	if err != nil {
+		return err
+	}
+	defer dstFile.Close()
+
+	_, err = io.Copy(dstFile, srcFile)
+	return err
+}
