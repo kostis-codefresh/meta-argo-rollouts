@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"os"
@@ -16,8 +17,50 @@ var workflowFiles = []string{
 	".github/workflows/e2e.yaml",
 }
 
+const cacheDir = "cache"
+const cacheFile = cacheDir + "/k8s-versions.json"
+
+// cachedRelease is the on-disk record for a single release, keyed by tag in the cache file.
+type cachedRelease struct {
+	Name        string   `json:"name"`
+	PublishedAt string   `json:"published_at"`
+	K8sVersions []string `json:"k8s_versions"`
+}
+
+// loadCache reads the k8s-versions cache from disk, returning an empty map on a cold
+// start (missing or unparseable file) rather than treating it as fatal.
+func loadCache() map[string]cachedRelease {
+	data, err := os.ReadFile(cacheFile)
+	if err != nil {
+		return map[string]cachedRelease{}
+	}
+	var cache map[string]cachedRelease
+	if err := json.Unmarshal(data, &cache); err != nil {
+		fmt.Fprintf(os.Stderr, "error parsing %s: %v\n", cacheFile, err)
+		return map[string]cachedRelease{}
+	}
+	return cache
+}
+
+// saveCache writes the k8s-versions cache to disk, creating the cache directory if needed.
+func saveCache(cache map[string]cachedRelease) {
+	if err := os.MkdirAll(cacheDir, 0755); err != nil {
+		fmt.Fprintf(os.Stderr, "error creating %s: %v\n", cacheDir, err)
+		return
+	}
+	data, err := json.MarshalIndent(cache, "", "  ")
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "error encoding %s: %v\n", cacheFile, err)
+		return
+	}
+	if err := os.WriteFile(cacheFile, data, 0644); err != nil {
+		fmt.Fprintf(os.Stderr, "error writing %s: %v\n", cacheFile, err)
+	}
+}
+
 // printReleasesWithK8sVersions lists every argoproj/argo-rollouts release along with
-// the Kubernetes versions covered by that release's e2e test matrix.
+// the Kubernetes versions covered by that release's e2e test matrix. Releases already
+// present in the on-disk cache are printed from the cache instead of being re-fetched.
 func printReleasesWithK8sVersions(ctx context.Context, client *github.Client) {
 	opts := &github.ListOptions{PerPage: 100}
 	var releases []*github.RepositoryRelease
@@ -34,14 +77,28 @@ func printReleasesWithK8sVersions(ctx context.Context, client *github.Client) {
 		opts.Page = resp.NextPage
 	}
 
+	cache := loadCache()
+
 	for _, r := range releases {
-		versions := fetchK8sVersions(ctx, client, r.GetTagName())
-		versionStr := "(no k8s data)"
-		if len(versions) > 0 {
-			versionStr = "[" + strings.Join(versions, ", ") + "]"
+		tag := r.GetTagName()
+		entry, ok := cache[tag]
+		if !ok {
+			entry = cachedRelease{
+				Name:        r.GetName(),
+				PublishedAt: r.GetPublishedAt().Format("2006-01-02"),
+				K8sVersions: fetchK8sVersions(ctx, client, tag),
+			}
+			cache[tag] = entry
 		}
-		fmt.Printf("%s - %s (%s) %s\n", r.GetTagName(), r.GetName(), r.GetPublishedAt().Format("2006-01-02"), versionStr)
+
+		versionStr := "(no k8s data)"
+		if len(entry.K8sVersions) > 0 {
+			versionStr = "[" + strings.Join(entry.K8sVersions, ", ") + "]"
+		}
+		fmt.Printf("%s - %s (%s) %s\n", tag, entry.Name, entry.PublishedAt, versionStr)
 	}
+
+	saveCache(cache)
 }
 
 // fetchK8sVersions returns the Kubernetes versions covered by the e2e test matrix
