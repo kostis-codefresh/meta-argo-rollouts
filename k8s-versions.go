@@ -38,23 +38,25 @@ func saveCache(cache map[string]cachedRelease) {
 	saveToCache(k8sVersionsCacheFile, cache)
 }
 
-// printReleasesWithK8sVersions lists every argoproj/argo-rollouts release along with
-// the Kubernetes versions covered by that release's e2e test matrix. Releases already
-// present in the on-disk cache are printed from the cache instead of being re-fetched.
+const releaseCount = 30
+
+// printReleasesWithK8sVersions lists the last 30 argoproj/argo-rollouts releases along
+// with the Kubernetes versions covered by each release's e2e test matrix. Releases
+// already present in the on-disk cache are printed from the cache instead of being
+// re-fetched.
 func printReleasesWithK8sVersions(ctx context.Context, client *github.Client) {
-	opts := &github.ListOptions{PerPage: 100}
-	var releases []*github.RepositoryRelease
-	for {
-		page, resp, err := client.Repositories.ListReleases(ctx, "argoproj", "argo-rollouts", opts)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "error fetching releases: %v\n", err)
-			os.Exit(1)
-		}
-		releases = append(releases, page...)
-		if resp.NextPage == 0 {
-			break
-		}
-		opts.Page = resp.NextPage
+	masterVersions := fetchK8sVersions(ctx, client, "master")
+	masterVersionStr := "(no k8s data)"
+	if len(masterVersions) > 0 {
+		masterVersionStr = "[" + strings.Join(masterVersions, ", ") + "]"
+	}
+	fmt.Printf("%s - %s (%s) %s\n", "master", "HEAD", "", masterVersionStr)
+
+	opts := &github.ListOptions{PerPage: releaseCount}
+	releases, _, err := client.Repositories.ListReleases(ctx, "argoproj", "argo-rollouts", opts)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "error fetching releases: %v\n", err)
+		os.Exit(1)
 	}
 
 	cache := loadCache()
