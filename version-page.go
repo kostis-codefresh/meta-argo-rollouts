@@ -36,6 +36,9 @@ func renderVersionPage(rows []releaseRow, generatedAt time.Time) error {
 	if err := copyFile("web/img/rollouts.png", "docs/img/rollouts.png"); err != nil {
 		return fmt.Errorf("copying rollouts.png: %w", err)
 	}
+	if err := copyFile("web/img/favicon.ico", "docs/img/favicon.ico"); err != nil {
+		return fmt.Errorf("copying favicon.ico: %w", err)
+	}
 
 	pageRows := make([]versionPageRow, 0, len(rows))
 	for _, row := range rows {
