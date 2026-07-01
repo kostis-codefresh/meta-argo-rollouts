@@ -65,7 +65,7 @@ func renderVersionPage(rows []releaseRow, generatedAt time.Time) error {
 	if err != nil {
 		return fmt.Errorf("creating %s: %w", versionPageOutput, err)
 	}
-	defer out.Close()
+	defer closeAndLog(out, versionPageOutput)
 
 	data := struct {
 		Rows        []versionPageRow
@@ -84,14 +84,22 @@ func copyFile(src, dst string) error {
 	if err != nil {
 		return err
 	}
-	defer srcFile.Close()
+	defer closeAndLog(srcFile, src)
 
 	dstFile, err := os.Create(dst)
 	if err != nil {
 		return err
 	}
-	defer dstFile.Close()
+	defer closeAndLog(dstFile, dst)
 
 	_, err = io.Copy(dstFile, srcFile)
 	return err
+}
+
+// closeAndLog closes c, logging (rather than returning) any error since callers invoke
+// this via defer where an error return can't be propagated.
+func closeAndLog(c io.Closer, path string) {
+	if err := c.Close(); err != nil {
+		fmt.Fprintf(os.Stderr, "error closing %s: %v\n", path, err)
+	}
 }
