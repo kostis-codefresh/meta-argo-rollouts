@@ -47,6 +47,7 @@ type releaseRow struct {
 	Name        string
 	PublishedAt time.Time
 	K8sVersions []string
+	HTMLURL     string
 }
 
 // collectReleaseRows fetches the master branch (always fresh, never cached) followed by
@@ -80,7 +81,7 @@ func collectReleaseRows(ctx context.Context, client *github.Client) []releaseRow
 			}
 			cache[tag] = entry
 		}
-		rows = append(rows, releaseRow{Tag: tag, Name: entry.Name, PublishedAt: entry.PublishedAt, K8sVersions: entry.K8sVersions})
+		rows = append(rows, releaseRow{Tag: tag, Name: entry.Name, PublishedAt: entry.PublishedAt, K8sVersions: entry.K8sVersions, HTMLURL: r.GetHTMLURL()})
 	}
 
 	saveCache(cache)

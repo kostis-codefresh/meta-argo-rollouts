@@ -15,6 +15,7 @@ const versionPageOutput = "docs/version.html"
 // versionPageRow is the presentation-shaped view of a releaseRow for the version page.
 type versionPageRow struct {
 	Tag             string
+	URL             string
 	SupportStatus   string
 	SupportClass    string
 	VersionsDisplay string
@@ -67,6 +68,7 @@ func renderVersionPage(rows []releaseRow, generatedAt time.Time) error {
 
 		pageRows = append(pageRows, versionPageRow{
 			Tag:             row.Tag,
+			URL:             row.HTMLURL,
 			SupportStatus:   supportStatus,
 			SupportClass:    supportClass,
 			VersionsDisplay: versionsDisplay,
