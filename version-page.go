@@ -41,15 +41,30 @@ func renderVersionPage(rows []releaseRow, generatedAt time.Time) error {
 	}
 
 	pageRows := make([]versionPageRow, 0, len(rows))
-	for _, row := range rows {
+	stableReleasesSeen := 0
+	for i, row := range rows {
 		versionsDisplay := "No data"
-		supportStatus := "No data"
-		supportClass := "text-muted"
 		if len(row.K8sVersions) > 0 {
 			versionsDisplay = strings.Join(row.K8sVersions, ", ")
-			supportStatus = "Supported"
-			supportClass = "diff-add"
 		}
+
+		isRC := strings.Contains(strings.ToLower(row.Tag), "rc")
+
+		supportStatus := "Unsupported"
+		supportClass := "diff-del"
+		if i > 0 && !isRC {
+			stableReleasesSeen++
+			switch stableReleasesSeen {
+			case 1:
+				supportStatus = "Supported"
+				supportClass = "diff-add"
+			case 2:
+				supportStatus = "Best-effort"
+				supportClass = "text-muted"
+			}
+		}
+		// master (i == 0), rc releases, and stable releases beyond the latest two fall through to Unsupported.
+
 		pageRows = append(pageRows, versionPageRow{
 			Tag:             row.Tag,
 			SupportStatus:   supportStatus,
