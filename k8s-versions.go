@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/google/go-github/v66/github"
 	"gopkg.in/yaml.v3"
@@ -20,9 +21,9 @@ const k8sVersionsCacheFile = "k8s-versions.json"
 
 // cachedRelease is the on-disk record for a single release, keyed by tag in the cache file.
 type cachedRelease struct {
-	Name        string   `json:"name"`
-	PublishedAt string   `json:"published_at"`
-	K8sVersions []string `json:"k8s_versions"`
+	Name        string    `json:"name"`
+	PublishedAt time.Time `json:"published_at"`
+	K8sVersions []string  `json:"k8s_versions"`
 }
 
 // loadCache reads the k8s-versions cache from disk, returning an empty map on a cold
@@ -44,7 +45,7 @@ const releaseCount = 30
 type releaseRow struct {
 	Tag         string
 	Name        string
-	PublishedAt string
+	PublishedAt time.Time
 	K8sVersions []string
 }
 
@@ -55,7 +56,7 @@ func collectReleaseRows(ctx context.Context, client *github.Client) []releaseRow
 	rows := []releaseRow{{
 		Tag:         "master",
 		Name:        "HEAD",
-		PublishedAt: "",
+		PublishedAt: fetchMasterCommitDate(ctx, client),
 		K8sVersions: fetchK8sVersions(ctx, client, "master"),
 	}}
 
@@ -74,7 +75,7 @@ func collectReleaseRows(ctx context.Context, client *github.Client) []releaseRow
 		if !ok {
 			entry = cachedRelease{
 				Name:        r.GetName(),
-				PublishedAt: r.GetPublishedAt().Format("2006-01-02"),
+				PublishedAt: r.GetPublishedAt().Time,
 				K8sVersions: fetchK8sVersions(ctx, client, tag),
 			}
 			cache[tag] = entry
@@ -87,6 +88,16 @@ func collectReleaseRows(ctx context.Context, client *github.Client) []releaseRow
 	return rows
 }
 
+// fetchMasterCommitDate returns the committer date of master's tip commit.
+func fetchMasterCommitDate(ctx context.Context, client *github.Client) time.Time {
+	commit, _, err := client.Repositories.GetCommit(ctx, "argoproj", "argo-rollouts", "master", nil)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "error fetching master commit date: %v\n", err)
+		return time.Time{}
+	}
+	return commit.GetCommit().GetCommitter().GetDate().Time
+}
+
 // printReleaseRows prints one line per row, matching the previous console output format.
 func printReleaseRows(rows []releaseRow) {
 	for _, row := range rows {
@@ -94,7 +105,7 @@ func printReleaseRows(rows []releaseRow) {
 		if len(row.K8sVersions) > 0 {
 			versionStr = "[" + strings.Join(row.K8sVersions, ", ") + "]"
 		}
-		fmt.Printf("%s - %s (%s) %s\n", row.Tag, row.Name, row.PublishedAt, versionStr)
+		fmt.Printf("%s - %s (%s) %s\n", row.Tag, row.Name, row.PublishedAt.Format("2006-01-02"), versionStr)
 	}
 }
 

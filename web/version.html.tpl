@@ -71,7 +71,7 @@
                                     <td>{{.Tag}}</td>
                                     <td><span class="{{.SupportClass}}">&#9679; {{.SupportStatus}}</span></td>
                                     <td>{{.VersionsDisplay}}</td>
-                                    <td>{{.PublishedAt}}</td>
+                                    <td>{{.PublishedAt.Format "2 January 2006"}}</td>
                                 </tr>
                             {{end}}
                             </tbody>

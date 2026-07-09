@@ -18,7 +18,7 @@ type versionPageRow struct {
 	SupportStatus   string
 	SupportClass    string
 	VersionsDisplay string
-	PublishedAt     string
+	PublishedAt     time.Time
 }
 
 // renderVersionPage copies the version page's static assets and renders
