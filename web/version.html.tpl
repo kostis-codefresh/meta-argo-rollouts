@@ -44,6 +44,12 @@
         </div>
 
         <div class="row g-3">
+            <div class="col-md-6">
+                <div class="card gcp-card p-4">
+                    <h6 class="text-muted text-uppercase small fw-bold">Kubernetes versions used in CI</h6>
+                    <p class="mb-0">This is just a list of Kubernetes versions that the e2e tests are using. It doesn't mean that K8s versions not mentioned here will not work with Argo Rollouts</p>
+                </div>
+            </div>
             <div class="col-12">
                 <div class="card gcp-card">
                     <div class="gcp-table-header">
