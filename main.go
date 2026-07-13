@@ -48,6 +48,12 @@ func main() {
 		fmt.Fprintf(os.Stderr, "error rendering ready page: %v\n", err)
 	}
 
+	criticalRows := collectCriticalPRRows(ctx, client, readyRows)
+	printCriticalPRRows(criticalRows)
+	if err := renderCriticalPage(criticalRows, generatedAt); err != nil {
+		fmt.Fprintf(os.Stderr, "error rendering critical page: %v\n", err)
+	}
+
 	rateLimits, _, err := client.RateLimit.Get(ctx)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error fetching rate limits: %v\n", err)

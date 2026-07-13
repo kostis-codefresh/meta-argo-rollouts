@@ -20,6 +20,8 @@ type readyPRRow struct {
 	HTMLURL   string
 	Author    string
 	CreatedAt time.Time
+	Additions int
+	Deletions int
 }
 
 // collectReadyPRRows fetches all open PRs and keeps only those with no merge
@@ -31,15 +33,19 @@ func collectReadyPRRows(ctx context.Context, client *github.Client) []readyPRRow
 
 	var rows []readyPRRow
 	for _, pr := range prs {
-		if isReadyToMerge(ctx, client, pr) {
-			rows = append(rows, readyPRRow{
-				Number:    pr.GetNumber(),
-				Title:     pr.GetTitle(),
-				HTMLURL:   pr.GetHTMLURL(),
-				Author:    pr.GetUser().GetLogin(),
-				CreatedAt: pr.GetCreatedAt().Time,
-			})
+		full, ready := checkReadyToMerge(ctx, client, pr)
+		if !ready {
+			continue
 		}
+		rows = append(rows, readyPRRow{
+			Number:    full.GetNumber(),
+			Title:     full.GetTitle(),
+			HTMLURL:   full.GetHTMLURL(),
+			Author:    full.GetUser().GetLogin(),
+			CreatedAt: full.GetCreatedAt().Time,
+			Additions: full.GetAdditions(),
+			Deletions: full.GetDeletions(),
+		})
 	}
 	return rows
 }
@@ -66,32 +72,36 @@ func listAllOpenPRs(ctx context.Context, client *github.Client) []*github.PullRe
 	return all
 }
 
-// isReadyToMerge applies the filter, making up to 4 calls per PR (Get,
-// ListReviews, ListReviewers, ListCheckRunsForRef). Any error is treated as
-// "not ready" rather than fatal, so one flaky PR lookup doesn't abort the
-// whole run.
-func isReadyToMerge(ctx context.Context, client *github.Client, pr *github.PullRequest) bool {
+// checkReadyToMerge applies the filter, making up to 4 calls per PR (Get,
+// ListReviews, ListReviewers, ListCheckRunsForRef). It returns the fetched PR
+// (with fields like Additions/Deletions only present on the single-PR Get
+// response) alongside whether it passed. Any error is treated as "not ready"
+// rather than fatal, so one flaky PR lookup doesn't abort the whole run.
+func checkReadyToMerge(ctx context.Context, client *github.Client, pr *github.PullRequest) (*github.PullRequest, bool) {
 	number := pr.GetNumber()
 
 	full, _, err := client.PullRequests.Get(ctx, "argoproj", "argo-rollouts", number)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error fetching PR #%d: %v\n", number, err)
-		return false
+		return nil, false
 	}
 	if full.GetMergeableState() == "dirty" {
-		return false
+		return nil, false
 	}
 
 	if !needsReview(ctx, client, number) {
-		return false
+		return nil, false
 	}
 
 	checks, _, err := client.Checks.ListCheckRunsForRef(ctx, "argoproj", "argo-rollouts", pr.GetHead().GetSHA(), &github.ListCheckRunsOptions{ListOptions: github.ListOptions{PerPage: perPageMax}})
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error fetching check runs for PR #%d: %v\n", number, err)
-		return false
+		return nil, false
 	}
-	return allChecksPassed(checks)
+	if !allChecksPassed(checks) {
+		return nil, false
+	}
+	return full, true
 }
 
 // needsReview reports whether the PR either has no reviews yet (brand new)
