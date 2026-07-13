@@ -21,7 +21,7 @@
             <span class="text-muted small">{{.GeneratedAt}}</span>
         </div>
         <div>
-            <img src="img/rollouts.png" alt="Argo Rollouts" class="navbar-logo">
+             <a href="https://github.com/kostis-codefresh/meta-argo-rollouts"><img src="img/rollouts.png" alt="Argo Rollouts" class="navbar-logo"></a>
         </div>
     </nav>
 
@@ -31,47 +31,43 @@
         <ul class="nav flex-column gap-1">
             <li class="nav-item"><a class="nav-link text-muted p-2" href="index.html">Dashboard</a></li>
             <li class="nav-item"><a class="nav-link text-muted p-2" href="critical.html">Critical PRs</a></li>
-            <li class="nav-item"><a class="nav-link text-muted p-2" href="ready.html">Ready PRs</a></li>
+            <li class="nav-item"><a class="nav-link text-dark active fw-medium p-2 rounded nav-link-active" href="ready.html">Ready PRs</a></li>
             <li class="nav-item"><a class="nav-link text-muted p-2" href="slow.html">Slow tests</a></li>
             <li class="nav-item"><a class="nav-link text-muted p-2" href="flaky.html">Flaky tests</a></li>
-            <li class="nav-item"><a class="nav-link text-dark active fw-medium p-2 rounded nav-link-active" href="version.html">K8s versions</a></li>
+            <li class="nav-item"><a class="nav-link text-muted p-2" href="version.html">K8s versions</a></li>
         </ul>
     </div>
 
     <div class="main-content">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h4 class="mb-0 fw-normal">K8s versions</h4>
+            <h4 class="mb-0 fw-normal">Ready PRs</h4>
         </div>
 
         <div class="row g-3">
-            <div class="col-md-6">
-                <div class="card gcp-card p-4">
-                    <h6 class="text-muted text-uppercase small fw-bold">Kubernetes versions used in CI</h6>
-                    <p class="mb-0">This is just a list of Kubernetes versions that the e2e tests are using. It doesn't mean that K8s versions not mentioned here will not work with Argo Rollouts</p>
-                </div>
-            </div>
             <div class="col-12">
                 <div class="card gcp-card">
                     <div class="gcp-table-header">
-                        <h6 class="text-muted text-uppercase small fw-bold mb-0">Kubernetes Version Support Matrix</h6>
+                        <h6 class="text-muted text-uppercase small fw-bold mb-0">Pull Requests Ready to Merge</h6>
                     </div>
                     <div class="table-responsive">
                         <table class="gcp-table">
                             <thead>
                                 <tr>
-                                    <th>Argo Rollouts Version</th>
-                                    <th>Support Status</th>
-                                    <th>K8s Versions</th>
-                                    <th>Released</th>
+                                    <th>PR</th>
+                                    <th>Author</th>
+                                    <th>Description</th>
+                                    <th>Checks</th>
+                                    <th>Opened</th>
                                 </tr>
                             </thead>
                             <tbody>
                             {{range .Rows}}
                                 <tr>
-                                    <td>{{if .URL}}<a href="{{.URL}}">{{.Tag}}</a>{{else}}{{.Tag}}{{end}}</td>
-                                    <td><span class="{{.SupportClass}}">&#9679; {{.SupportStatus}}</span></td>
-                                    <td>{{.VersionsDisplay}}</td>
-                                    <td>{{.PublishedAt.Format "2 January 2006"}}</td>
+                                    <td><a href="{{.URL}}">#{{.Number}}</a></td>
+                                    <td>{{.Author}}</td>
+                                    <td>{{.Title}}</td>
+                                    <td><span class="{{.ChecksClass}}">{{.ChecksLabel}}</span></td>
+                                    <td>{{.OpenedAt.Format "2 January 2006"}}</td>
                                 </tr>
                             {{end}}
                             </tbody>
