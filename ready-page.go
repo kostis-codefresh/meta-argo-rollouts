@@ -47,8 +47,8 @@ func renderReadyPage(rows []readyPRRow, generatedAt time.Time) error {
 			URL:         row.HTMLURL,
 			Author:      row.Author,
 			Title:       row.Title,
-			ChecksLabel: "Running",
-			ChecksClass: "status-pill status-running",
+			ChecksLabel: "Passed",
+			ChecksClass: "status-pill status-success",
 			OpenedAt:    row.CreatedAt,
 		})
 	}

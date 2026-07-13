@@ -160,9 +160,9 @@ body {
     font-weight: 500;
 }
 
-.status-running {
-    background-color: #fef7e0;
-    color: #b06000;
+.status-success {
+    background-color: #e6f4ea;
+    color: #137333;
 }
 
 /* ── Main content ── */

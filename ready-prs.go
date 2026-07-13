@@ -11,8 +11,9 @@ import (
 
 const perPageMax = 100
 
-// readyPRRow is one open PR with no merge conflicts, no existing reviews,
-// and all checks still running.
+// readyPRRow is one open PR with no merge conflicts, all checks passing, and
+// either no reviews yet or an outstanding review request (someone was asked,
+// or re-asked, to review).
 type readyPRRow struct {
 	Number    int
 	Title     string
@@ -22,8 +23,9 @@ type readyPRRow struct {
 }
 
 // collectReadyPRRows fetches all open PRs and keeps only those with no merge
-// conflicts, no reviews, and all checks still running. Always live — no on-disk
-// cache, since this state is transient (unlike immutable releases).
+// conflicts, all checks passing, and either no reviews yet or an outstanding
+// review request. Always live — no on-disk cache, since this state is
+// transient (unlike immutable releases).
 func collectReadyPRRows(ctx context.Context, client *github.Client) []readyPRRow {
 	prs := listAllOpenPRs(ctx, client)
 
@@ -64,9 +66,10 @@ func listAllOpenPRs(ctx context.Context, client *github.Client) []*github.PullRe
 	return all
 }
 
-// isReadyToMerge applies the three-part filter, making up to 3 calls per PR
-// (Get, ListReviews, ListCheckRunsForRef). Any error is treated as "not ready"
-// rather than fatal, so one flaky PR lookup doesn't abort the whole run.
+// isReadyToMerge applies the filter, making up to 4 calls per PR (Get,
+// ListReviews, ListReviewers, ListCheckRunsForRef). Any error is treated as
+// "not ready" rather than fatal, so one flaky PR lookup doesn't abort the
+// whole run.
 func isReadyToMerge(ctx context.Context, client *github.Client, pr *github.PullRequest) bool {
 	number := pr.GetNumber()
 
@@ -79,12 +82,7 @@ func isReadyToMerge(ctx context.Context, client *github.Client, pr *github.PullR
 		return false
 	}
 
-	reviews, _, err := client.PullRequests.ListReviews(ctx, "argoproj", "argo-rollouts", number, &github.ListOptions{PerPage: perPageMax})
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "error fetching reviews for PR #%d: %v\n", number, err)
-		return false
-	}
-	if len(reviews) != 0 {
+	if !needsReview(ctx, client, number) {
 		return false
 	}
 
@@ -93,17 +91,43 @@ func isReadyToMerge(ctx context.Context, client *github.Client, pr *github.PullR
 		fmt.Fprintf(os.Stderr, "error fetching check runs for PR #%d: %v\n", number, err)
 		return false
 	}
-	return allChecksRunning(checks)
+	return allChecksPassed(checks)
 }
 
-// allChecksRunning reports whether check runs exist for the ref and none have
-// completed yet.
-func allChecksRunning(checks *github.ListCheckRunsResults) bool {
+// needsReview reports whether the PR either has no reviews yet (brand new)
+// or has an outstanding review request (someone has been asked, or re-asked
+// after addressing feedback, to review).
+func needsReview(ctx context.Context, client *github.Client, number int) bool {
+	reviews, _, err := client.PullRequests.ListReviews(ctx, "argoproj", "argo-rollouts", number, &github.ListOptions{PerPage: perPageMax})
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "error fetching reviews for PR #%d: %v\n", number, err)
+		return false
+	}
+	if len(reviews) == 0 {
+		return true
+	}
+
+	reviewers, _, err := client.PullRequests.ListReviewers(ctx, "argoproj", "argo-rollouts", number, &github.ListOptions{PerPage: perPageMax})
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "error fetching requested reviewers for PR #%d: %v\n", number, err)
+		return false
+	}
+	return len(reviewers.Users) != 0 || len(reviewers.Teams) != 0
+}
+
+// allChecksPassed reports whether check runs exist for the ref and every one
+// has completed with a passing conclusion (success or skipped).
+func allChecksPassed(checks *github.ListCheckRunsResults) bool {
 	if len(checks.CheckRuns) == 0 {
 		return false
 	}
 	for _, run := range checks.CheckRuns {
-		if run.GetStatus() == "completed" {
+		if run.GetStatus() != "completed" {
+			return false
+		}
+		switch run.GetConclusion() {
+		case "success", "skipped":
+		default:
 			return false
 		}
 	}
