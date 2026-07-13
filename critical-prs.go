@@ -31,15 +31,7 @@ func collectCriticalPRRows(ctx context.Context, client *github.Client, readyRows
 		if !removesTestCode(ctx, client, r.Number) {
 			continue
 		}
-		rows = append(rows, criticalPRRow{
-			Number:    r.Number,
-			Title:     r.Title,
-			HTMLURL:   r.HTMLURL,
-			Author:    r.Author,
-			CreatedAt: r.CreatedAt,
-			Additions: r.Additions,
-			Deletions: r.Deletions,
-		})
+		rows = append(rows, criticalPRRow(r))
 	}
 	return rows
 }
