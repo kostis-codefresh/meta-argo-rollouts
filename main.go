@@ -42,6 +42,10 @@ func main() {
 		fmt.Fprintf(os.Stderr, "error rendering version page: %v\n", err)
 	}
 
+	if err := renderIndexPage(rows, generatedAt); err != nil {
+		fmt.Fprintf(os.Stderr, "error rendering index page: %v\n", err)
+	}
+
 	readyRows := collectReadyPRRows(ctx, client)
 	printReadyPRRows(readyRows)
 	if err := renderReadyPage(readyRows, generatedAt); err != nil {

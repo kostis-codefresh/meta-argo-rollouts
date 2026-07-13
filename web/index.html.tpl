@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="dashboard.css" rel="stylesheet">
+</head>
+<body>
+
+    <input type="checkbox" id="sidebar-toggle" class="sidebar-toggle-input">
+
+    <nav class="navbar gcp-navbar sticky-top p-0 px-3 d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+            <label for="sidebar-toggle" class="hamburger-btn me-3">
+                <img src="img/menu.svg" alt="Menu" class="hamburger-icon">
+            </label>
+            <span class="fw-medium me-3 gcp-brand">Argo Rollouts Meta</span>
+            <span class="text-muted small">{{.GeneratedAt}}</span>
+        </div>
+        <div>
+             <a href="https://github.com/kostis-codefresh/meta-argo-rollouts"><img src="img/rollouts.png" alt="Argo Rollouts" class="navbar-logo"></a>
+        </div>
+    </nav>
+
+    <label for="sidebar-toggle" class="sidebar-backdrop"></label>
+
+    <div class="gcp-sidebar p-3">
+        <ul class="nav flex-column gap-1">
+            <li class="nav-item"><a class="nav-link text-dark active fw-medium p-2 rounded nav-link-active" href="index.html">Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link text-muted p-2" href="critical.html">Critical PRs</a></li>
+            <li class="nav-item"><a class="nav-link text-muted p-2" href="ready.html">Ready PRs</a></li>
+            <li class="nav-item"><a class="nav-link text-muted p-2" href="slow.html">Slow tests</a></li>
+            <li class="nav-item"><a class="nav-link text-muted p-2" href="flaky.html">Flaky tests</a></li>
+            <li class="nav-item"><a class="nav-link text-muted p-2" href="version.html">K8s versions</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="mb-0 fw-normal">Project Info</h4>
+        </div>
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="card gcp-card p-4">
+                    <h6 class="text-muted text-uppercase small fw-bold">Project Details</h6>
+                    <p class="mb-1"><strong>Argo Rollout releases total:</strong> {{.TotalReleases}}</p>
+                    <p class="mb-0"><strong>Last release:</strong> {{.LastRelease}}, Released on date {{.ReleasedOn}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
