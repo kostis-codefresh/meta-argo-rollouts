@@ -70,7 +70,7 @@
                                 <tr>
                                     <td>{{if .URL}}<a href="{{.URL}}">{{.Tag}}</a>{{else}}{{.Tag}}{{end}}</td>
                                     <td><span class="{{.SupportClass}}">&#9679; {{.SupportStatus}}</span></td>
-                                    <td>{{.VersionsDisplay}}</td>
+                                    <td>{{if .K8sSourceURL}}<a href="{{.K8sSourceURL}}">{{.VersionsDisplay}}</a>{{else}}{{.VersionsDisplay}}{{end}}</td>
                                     <td>{{.PublishedAt.Format "2 January 2006"}}</td>
                                 </tr>
                             {{end}}

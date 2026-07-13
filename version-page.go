@@ -19,6 +19,7 @@ type versionPageRow struct {
 	SupportStatus   string
 	SupportClass    string
 	VersionsDisplay string
+	K8sSourceURL    string
 	PublishedAt     time.Time
 }
 
@@ -72,6 +73,7 @@ func renderVersionPage(rows []releaseRow, generatedAt time.Time) error {
 			SupportStatus:   supportStatus,
 			SupportClass:    supportClass,
 			VersionsDisplay: versionsDisplay,
+			K8sSourceURL:    row.SourceURL,
 			PublishedAt:     row.PublishedAt,
 		})
 	}
