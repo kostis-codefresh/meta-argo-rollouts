@@ -1,0 +1,326 @@
+{
+  "v1.10.0-rc1": {
+    "name": "v1.10.0-rc1",
+    "published_at": "2026-07-03T12:53:46Z",
+    "k8s_versions": [
+      "1.32",
+      "1.33",
+      "1.34",
+      "1.35"
+    ],
+    "source_url": "https://github.com/argoproj/argo-rollouts/blob/v1.10.0-rc1/.github/workflows/testing.yaml#L100"
+  },
+  "v1.3.3": {
+    "name": "v1.3.3",
+    "published_at": "2023-02-25T04:38:57Z",
+    "k8s_versions": null,
+    "source_url": ""
+  },
+  "v1.4.0": {
+    "name": "v1.4.0",
+    "published_at": "2023-01-09T21:43:34Z",
+    "k8s_versions": null,
+    "source_url": ""
+  },
+  "v1.4.0-rc1": {
+    "name": "v1.4.0-rc1",
+    "published_at": "2022-12-20T02:07:55Z",
+    "k8s_versions": [
+      "1.23",
+      "1.24"
+    ],
+    "source_url": "https://github.com/argoproj/argo-rollouts/blob/v1.4.0-rc1/.github/workflows/e2e.yaml#L40"
+  },
+  "v1.4.1": {
+    "name": "v1.4.1",
+    "published_at": "2023-02-25T15:23:34Z",
+    "k8s_versions": [
+      "1.23",
+      "1.24"
+    ],
+    "source_url": "https://github.com/argoproj/argo-rollouts/blob/v1.4.1/.github/workflows/e2e.yaml#L40"
+  },
+  "v1.5.0": {
+    "name": "v1.5.0",
+    "published_at": "2023-05-08T15:34:06Z",
+    "k8s_versions": [
+      "1.23",
+      "1.24",
+      "1.25",
+      "1.26"
+    ],
+    "source_url": "https://github.com/argoproj/argo-rollouts/blob/v1.5.0/.github/workflows/e2e.yaml#L40"
+  },
+  "v1.5.0-rc1": {
+    "name": "v1.5.0-rc1",
+    "published_at": "2023-03-27T20:09:25Z",
+    "k8s_versions": [
+      "1.23",
+      "1.24",
+      "1.25",
+      "1.26"
+    ],
+    "source_url": "https://github.com/argoproj/argo-rollouts/blob/v1.5.0-rc1/.github/workflows/e2e.yaml#L40"
+  },
+  "v1.5.1": {
+    "name": "v1.5.1",
+    "published_at": "2023-05-24T19:26:51Z",
+    "k8s_versions": [
+      "1.23",
+      "1.24",
+      "1.25",
+      "1.26"
+    ],
+    "source_url": "https://github.com/argoproj/argo-rollouts/blob/v1.5.1/.github/workflows/e2e.yaml#L40"
+  },
+  "v1.6.0": {
+    "name": "v1.6.0",
+    "published_at": "2023-09-06T19:00:06Z",
+    "k8s_versions": [
+      "1.23",
+      "1.24",
+      "1.25",
+      "1.26"
+    ],
+    "source_url": "https://github.com/argoproj/argo-rollouts/blob/v1.6.0/.github/workflows/e2e.yaml#L40"
+  },
+  "v1.6.0-rc1": {
+    "name": "v1.6.0-rc1",
+    "published_at": "2023-08-11T14:22:24Z",
+    "k8s_versions": [
+      "1.23",
+      "1.24",
+      "1.25",
+      "1.26"
+    ],
+    "source_url": "https://github.com/argoproj/argo-rollouts/blob/v1.6.0-rc1/.github/workflows/e2e.yaml#L40"
+  },
+  "v1.6.1": {
+    "name": "v1.6.1",
+    "published_at": "2023-11-01T21:19:43Z",
+    "k8s_versions": [
+      "1.23",
+      "1.24",
+      "1.25",
+      "1.26"
+    ],
+    "source_url": "https://github.com/argoproj/argo-rollouts/blob/v1.6.1/.github/workflows/e2e.yaml#L40"
+  },
+  "v1.6.2": {
+    "name": "v1.6.2",
+    "published_at": "2023-11-02T19:58:08Z",
+    "k8s_versions": [
+      "1.23",
+      "1.24",
+      "1.25",
+      "1.26"
+    ],
+    "source_url": "https://github.com/argoproj/argo-rollouts/blob/v1.6.2/.github/workflows/e2e.yaml#L40"
+  },
+  "v1.6.3": {
+    "name": "v1.6.3",
+    "published_at": "2023-12-05T14:36:31Z",
+    "k8s_versions": [
+      "1.23",
+      "1.24",
+      "1.25",
+      "1.26"
+    ],
+    "source_url": "https://github.com/argoproj/argo-rollouts/blob/v1.6.3/.github/workflows/e2e.yaml#L40"
+  },
+  "v1.6.4": {
+    "name": "v1.6.4",
+    "published_at": "2023-12-11T21:54:30Z",
+    "k8s_versions": [
+      "1.23",
+      "1.24",
+      "1.25",
+      "1.26"
+    ],
+    "source_url": "https://github.com/argoproj/argo-rollouts/blob/v1.6.4/.github/workflows/e2e.yaml#L40"
+  },
+  "v1.6.5": {
+    "name": "v1.6.5",
+    "published_at": "2024-01-25T20:19:53Z",
+    "k8s_versions": [
+      "1.23",
+      "1.24",
+      "1.25",
+      "1.26"
+    ],
+    "source_url": "https://github.com/argoproj/argo-rollouts/blob/v1.6.5/.github/workflows/e2e.yaml#L40"
+  },
+  "v1.6.6": {
+    "name": "v1.6.6",
+    "published_at": "2024-02-13T15:56:59Z",
+    "k8s_versions": [
+      "1.23",
+      "1.24",
+      "1.25",
+      "1.26"
+    ],
+    "source_url": "https://github.com/argoproj/argo-rollouts/blob/v1.6.6/.github/workflows/e2e.yaml#L40"
+  },
+  "v1.7.0": {
+    "name": "v1.7.0",
+    "published_at": "2024-06-13T20:23:14Z",
+    "k8s_versions": [
+      "1.24",
+      "1.25",
+      "1.26",
+      "1.27",
+      "1.28",
+      "1.29"
+    ],
+    "source_url": "https://github.com/argoproj/argo-rollouts/blob/v1.7.0/.github/workflows/e2e.yaml#L40"
+  },
+  "v1.7.0-rc1": {
+    "name": "v1.7.0-rc1",
+    "published_at": "2024-04-05T18:24:00Z",
+    "k8s_versions": [
+      "1.24",
+      "1.25",
+      "1.26",
+      "1.27",
+      "1.28",
+      "1.29"
+    ],
+    "source_url": "https://github.com/argoproj/argo-rollouts/blob/v1.7.0-rc1/.github/workflows/e2e.yaml#L40"
+  },
+  "v1.7.1": {
+    "name": "v1.7.1",
+    "published_at": "2024-06-25T01:38:31Z",
+    "k8s_versions": [
+      "1.24",
+      "1.25",
+      "1.26",
+      "1.27",
+      "1.28",
+      "1.29"
+    ],
+    "source_url": "https://github.com/argoproj/argo-rollouts/blob/v1.7.1/.github/workflows/e2e.yaml#L40"
+  },
+  "v1.7.2": {
+    "name": "v1.7.2",
+    "published_at": "2024-08-13T18:42:47Z",
+    "k8s_versions": [
+      "1.24",
+      "1.25",
+      "1.26",
+      "1.27",
+      "1.28",
+      "1.29"
+    ],
+    "source_url": "https://github.com/argoproj/argo-rollouts/blob/v1.7.2/.github/workflows/e2e.yaml#L40"
+  },
+  "v1.8.0": {
+    "name": "v1.8.0",
+    "published_at": "2025-01-30T18:24:03Z",
+    "k8s_versions": [
+      "1.28",
+      "1.29",
+      "1.30",
+      "1.31"
+    ],
+    "source_url": "https://github.com/argoproj/argo-rollouts/blob/v1.8.0/.github/workflows/testing.yaml#L81"
+  },
+  "v1.8.0-rc1": {
+    "name": "v1.8.0-rc1",
+    "published_at": "2024-12-09T14:28:35Z",
+    "k8s_versions": [
+      "1.26",
+      "1.27",
+      "1.28",
+      "1.29"
+    ],
+    "source_url": "https://github.com/argoproj/argo-rollouts/blob/v1.8.0-rc1/.github/workflows/testing.yaml#L81"
+  },
+  "v1.8.0-rc2": {
+    "name": "v1.8.0-rc2",
+    "published_at": "2025-01-16T19:43:44Z",
+    "k8s_versions": [
+      "1.28",
+      "1.29",
+      "1.30",
+      "1.31"
+    ],
+    "source_url": "https://github.com/argoproj/argo-rollouts/blob/v1.8.0-rc2/.github/workflows/testing.yaml#L81"
+  },
+  "v1.8.1": {
+    "name": "v1.8.1",
+    "published_at": "2025-03-20T16:40:33Z",
+    "k8s_versions": [
+      "1.28",
+      "1.29",
+      "1.30",
+      "1.31"
+    ],
+    "source_url": "https://github.com/argoproj/argo-rollouts/blob/v1.8.1/.github/workflows/testing.yaml#L81"
+  },
+  "v1.8.2": {
+    "name": "v1.8.2",
+    "published_at": "2025-03-21T20:37:43Z",
+    "k8s_versions": [
+      "1.28",
+      "1.29",
+      "1.30",
+      "1.31"
+    ],
+    "source_url": "https://github.com/argoproj/argo-rollouts/blob/v1.8.2/.github/workflows/testing.yaml#L81"
+  },
+  "v1.8.3": {
+    "name": "v1.8.3",
+    "published_at": "2025-06-05T17:13:44Z",
+    "k8s_versions": [
+      "1.28",
+      "1.29",
+      "1.30",
+      "1.31"
+    ],
+    "source_url": "https://github.com/argoproj/argo-rollouts/blob/v1.8.3/.github/workflows/testing.yaml#L81"
+  },
+  "v1.8.4": {
+    "name": "v1.8.4",
+    "published_at": "2026-02-13T23:03:13Z",
+    "k8s_versions": [
+      "1.28",
+      "1.29",
+      "1.30",
+      "1.31"
+    ],
+    "source_url": "https://github.com/argoproj/argo-rollouts/blob/v1.8.4/.github/workflows/testing.yaml#L81"
+  },
+  "v1.9.0": {
+    "name": "v1.9.0",
+    "published_at": "2026-03-20T21:31:10Z",
+    "k8s_versions": [
+      "1.31",
+      "1.32",
+      "1.33",
+      "1.34"
+    ],
+    "source_url": "https://github.com/argoproj/argo-rollouts/blob/v1.9.0/.github/workflows/testing.yaml#L77"
+  },
+  "v1.9.0-rc1": {
+    "name": "v1.9.0-rc1",
+    "published_at": "2025-11-08T02:52:28Z",
+    "k8s_versions": [
+      "1.31",
+      "1.32",
+      "1.33",
+      "1.34"
+    ],
+    "source_url": "https://github.com/argoproj/argo-rollouts/blob/v1.9.0-rc1/.github/workflows/testing.yaml#L77"
+  },
+  "v1.9.0-rc3": {
+    "name": "v1.9.0-rc3",
+    "published_at": "2025-11-28T22:42:42Z",
+    "k8s_versions": [
+      "1.31",
+      "1.32",
+      "1.33",
+      "1.34"
+    ],
+    "source_url": "https://github.com/argoproj/argo-rollouts/blob/v1.9.0-rc3/.github/workflows/testing.yaml#L77"
+  }
+}
