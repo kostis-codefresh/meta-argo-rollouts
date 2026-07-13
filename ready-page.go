@@ -5,6 +5,8 @@ import (
 	"html/template"
 	"os"
 	"time"
+
+	"github.com/dustin/go-humanize"
 )
 
 const readyPageTemplate = "web/ready.html.tpl"
@@ -12,13 +14,14 @@ const readyPageOutput = "docs/ready.html"
 
 // readyPageRow is the presentation-shaped view of a readyPRRow for the ready-PRs page.
 type readyPageRow struct {
-	Number      int
-	URL         string
-	Author      string
-	Title       string
-	ChecksLabel string
-	ChecksClass string
-	OpenedAt    time.Time
+	Number         int
+	URL            string
+	Author         string
+	Title          string
+	ChecksLabel    string
+	ChecksClass    string
+	OpenedRelative string
+	OpenedTitle    string
 }
 
 // renderReadyPage copies the ready page's static assets and renders
@@ -43,13 +46,14 @@ func renderReadyPage(rows []readyPRRow, generatedAt time.Time) error {
 	pageRows := make([]readyPageRow, 0, len(rows))
 	for _, row := range rows {
 		pageRows = append(pageRows, readyPageRow{
-			Number:      row.Number,
-			URL:         row.HTMLURL,
-			Author:      row.Author,
-			Title:       row.Title,
-			ChecksLabel: "Passed",
-			ChecksClass: "status-pill status-success",
-			OpenedAt:    row.CreatedAt,
+			Number:         row.Number,
+			URL:            row.HTMLURL,
+			Author:         row.Author,
+			Title:          row.Title,
+			ChecksLabel:    "Passed",
+			ChecksClass:    "status-pill status-success",
+			OpenedRelative: humanize.RelTime(row.CreatedAt, generatedAt, "ago", "from now"),
+			OpenedTitle:    row.CreatedAt.Format("02 Jan 2006"),
 		})
 	}
 

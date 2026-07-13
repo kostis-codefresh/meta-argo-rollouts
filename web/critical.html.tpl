@@ -66,7 +66,7 @@
                                     <td><a href="{{.URL}}">#{{.Number}}</a></td>
                                     <td>{{.Author}}</td>
                                     <td>{{.Title}}</td>
-                                    <td>{{.OpenedAt.Format "2006-01-02"}}</td>
+                                    <td title="{{.OpenedTitle}}">{{.OpenedRelative}}</td>
                                     <td><span class="diff-add">+{{.Additions}}</span> / <span class="diff-del">-{{.Deletions}}</span></td>
                                 </tr>
                             {{end}}

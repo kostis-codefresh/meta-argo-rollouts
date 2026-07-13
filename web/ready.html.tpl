@@ -67,7 +67,7 @@
                                     <td>{{.Author}}</td>
                                     <td>{{.Title}}</td>
                                     <td><span class="{{.ChecksClass}}">{{.ChecksLabel}}</span></td>
-                                    <td>{{.OpenedAt.Format "2 January 2006"}}</td>
+                                    <td title="{{.OpenedTitle}}">{{.OpenedRelative}}</td>
                                 </tr>
                             {{end}}
                             </tbody>

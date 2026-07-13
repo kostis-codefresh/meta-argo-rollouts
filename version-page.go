@@ -7,6 +7,8 @@ import (
 	"os"
 	"strings"
 	"time"
+
+	"github.com/dustin/go-humanize"
 )
 
 const versionPageTemplate = "web/version.html.tpl"
@@ -14,12 +16,13 @@ const versionPageOutput = "docs/version.html"
 
 // versionPageRow is the presentation-shaped view of a releaseRow for the version page.
 type versionPageRow struct {
-	Tag             string
-	URL             string
-	SupportStatus   string
-	SupportClass    string
-	VersionsDisplay string
-	PublishedAt     time.Time
+	Tag               string
+	URL               string
+	SupportStatus     string
+	SupportClass      string
+	VersionsDisplay   string
+	PublishedRelative string
+	PublishedTitle    string
 }
 
 // renderVersionPage copies the version page's static assets and renders
@@ -67,12 +70,13 @@ func renderVersionPage(rows []releaseRow, generatedAt time.Time) error {
 		// master (i == 0), rc releases, and stable releases beyond the latest two fall through to Unsupported.
 
 		pageRows = append(pageRows, versionPageRow{
-			Tag:             row.Tag,
-			URL:             row.HTMLURL,
-			SupportStatus:   supportStatus,
-			SupportClass:    supportClass,
-			VersionsDisplay: versionsDisplay,
-			PublishedAt:     row.PublishedAt,
+			Tag:               row.Tag,
+			URL:               row.HTMLURL,
+			SupportStatus:     supportStatus,
+			SupportClass:      supportClass,
+			VersionsDisplay:   versionsDisplay,
+			PublishedRelative: humanize.RelTime(row.PublishedAt, generatedAt, "ago", "from now"),
+			PublishedTitle:    row.PublishedAt.Format("02 Jan 2006"),
 		})
 	}
 
