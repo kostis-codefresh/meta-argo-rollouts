@@ -132,8 +132,9 @@ func checkReadyToMerge(ctx context.Context, client *github.Client, pr *github.Pu
 // needsReview reports whether the PR still needs a human verdict: no
 // reviews yet, only comments so far, or changes were requested and the
 // same reviewer who requested them has since been re-requested. An approval
-// by anyone hides the PR permanently, regardless of any other outstanding
-// review requests.
+// from someone with write access to the repo hides the PR permanently,
+// regardless of any other outstanding review requests; an approval from an
+// outside contributor (no merge authority) does not count.
 func needsReview(ctx context.Context, client *github.Client, number int) bool {
 	reviews, _, err := client.PullRequests.ListReviews(ctx, owner, repo, number, &github.ListOptions{PerPage: perPageMax})
 	if err != nil {
@@ -148,7 +149,9 @@ func needsReview(ctx context.Context, client *github.Client, number int) bool {
 	for _, review := range reviews {
 		switch review.GetState() {
 		case "APPROVED":
-			return false
+			if hasWriteAccess(review) {
+				return false
+			}
 		case "CHANGES_REQUESTED":
 			changesRequestedBy[review.GetUser().GetLogin()] = true
 		}
@@ -168,6 +171,20 @@ func needsReview(ctx context.Context, client *github.Client, number int) bool {
 		}
 	}
 	return false
+}
+
+// hasWriteAccess reports whether the review's author has write access to the
+// repo, based on GitHub's author_association field. An OWNER, MEMBER, or
+// COLLABORATOR can actually merge the PR; a CONTRIBUTOR or other outside
+// association is someone who merely has commit history or no relationship
+// with the repo, so their approval carries no merge authority.
+func hasWriteAccess(review *github.PullRequestReview) bool {
+	switch review.GetAuthorAssociation() {
+	case "OWNER", "MEMBER", "COLLABORATOR":
+		return true
+	default:
+		return false
+	}
 }
 
 // allChecksPassed reports whether check runs exist for the ref and every one

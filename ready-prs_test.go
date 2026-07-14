@@ -75,14 +75,25 @@ func TestNeedsReview(t *testing.T) {
 			want:          true,
 		},
 		{
-			name:   "approved by someone else hides it regardless of an earlier changes-requested",
+			name:   "approved by a collaborator hides it regardless of an earlier changes-requested",
 			number: 3,
 			reviewsJSON: `[
 				{"user": {"login": "alice"}, "state": "CHANGES_REQUESTED"},
-				{"user": {"login": "bob"}, "state": "APPROVED"}
+				{"user": {"login": "bob"}, "state": "APPROVED", "author_association": "COLLABORATOR"}
 			]`,
 			reviewersJSON: `{"users": [{"login": "alice"}], "teams": []}`,
 			want:          false,
+		},
+		{
+			// An outside contributor's approval carries no merge authority and
+			// must not hide the PR.
+			name:   "approved by an outside contributor does not hide it",
+			number: 6,
+			reviewsJSON: `[
+				{"user": {"login": "dave"}, "state": "APPROVED", "author_association": "CONTRIBUTOR"}
+			]`,
+			reviewersJSON: `{"users": [], "teams": []}`,
+			want:          true,
 		},
 		{
 			name:   "changes requested, no one currently requested",
