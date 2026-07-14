@@ -21,6 +21,16 @@ jobs:
       with:
         go-version: '1.26'
 
+    - name: Check formatting
+      run: |
+        if [ -n "$(gofmt -l .)" ]; then
+          gofmt -d .
+          exit 1
+        fi
+
+    - name: Vet
+      run: go vet ./...
+
     - name: Build
       run: go build -v ./...
 
