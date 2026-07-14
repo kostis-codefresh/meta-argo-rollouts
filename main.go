@@ -67,6 +67,12 @@ func main() {
 		fmt.Fprintf(os.Stderr, "error rendering slow tests page: %v\n", err)
 	}
 
+	flakyRows := collectFlakyTestRows(ctx, client)
+	printFlakyTestRows(flakyRows)
+	if err := renderFlakyPage(flakyRows, generatedAt); err != nil {
+		fmt.Fprintf(os.Stderr, "error rendering flaky tests page: %v\n", err)
+	}
+
 	rateLimits, _, err := client.RateLimit.Get(ctx)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error fetching rate limits: %v\n", err)

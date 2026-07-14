@@ -18,10 +18,10 @@
                 <img src="img/menu.svg" alt="Menu" class="hamburger-icon">
             </label>
             <span class="fw-medium me-3 gcp-brand">Argo Rollouts Meta</span>
-            <span class="text-muted small">09 Jun 2026 14:51 UTC</span>
+            <span class="text-muted small">{{.GeneratedAt}}</span>
         </div>
         <div>
-            <img src="img/rollouts.png" alt="Argo Rollouts" class="navbar-logo">
+             <a href="https://github.com/kostis-codefresh/meta-argo-rollouts"><img src="img/rollouts.png" alt="Argo Rollouts" class="navbar-logo"></a>
         </div>
     </nav>
 
@@ -47,7 +47,7 @@
             <div class="col-12">
                 <div class="card gcp-card">
                     <div class="gcp-table-header">
-                        <h6 class="text-muted text-uppercase small fw-bold mb-0">Flaky Tests (last 30 days)</h6>
+                        <h6 class="text-muted text-uppercase small fw-bold mb-0">Flaky Tests (last 10 CI runs)</h6>
                     </div>
                     <div class="table-responsive">
                         <table class="gcp-table">
@@ -60,48 +60,18 @@
                                 </tr>
                             </thead>
                             <tbody>
+                            {{if .Rows}}
+                                {{range .Rows}}
                                 <tr>
-                                    <td>TestRolloutSyncEphemeralContainers</td>
-                                    <td>rollout/controller</td>
-                                    <td><span class="diff-del">14.2%</span></td>
-                                    <td>2024-05-30</td>
+                                    <td>{{.Name}}</td>
+                                    <td>{{.Suite}}</td>
+                                    <td><span class="diff-del">{{.FlakeRateDisplay}}</span></td>
+                                    <td title="{{.LastFailureTitle}}">{{.LastFailureRelative}}</td>
                                 </tr>
-                                <tr>
-                                    <td>TestAnalysisRunPrometheusFlakeyProvider</td>
-                                    <td>analysis/providers/prometheus</td>
-                                    <td><span class="diff-del">11.8%</span></td>
-                                    <td>2024-05-29</td>
-                                </tr>
-                                <tr>
-                                    <td>TestServiceMeshWeightConvergence</td>
-                                    <td>trafficrouting/smi</td>
-                                    <td><span class="diff-del">9.6%</span></td>
-                                    <td>2024-05-27</td>
-                                </tr>
-                                <tr>
-                                    <td>TestExperimentConcurrentTermination</td>
-                                    <td>experiments</td>
-                                    <td><span class="diff-del">7.3%</span></td>
-                                    <td>2024-05-24</td>
-                                </tr>
-                                <tr>
-                                    <td>TestPluginProcessRestartOnCrash</td>
-                                    <td>plugin</td>
-                                    <td><span class="diff-del">5.9%</span></td>
-                                    <td>2024-05-21</td>
-                                </tr>
-                                <tr>
-                                    <td>TestIngressAnnotationRaceCondition</td>
-                                    <td>trafficrouting/nginx</td>
-                                    <td><span class="diff-del">4.1%</span></td>
-                                    <td>2024-05-16</td>
-                                </tr>
-                                <tr>
-                                    <td>TestMetricProviderCancelOnContextDone</td>
-                                    <td>analysis</td>
-                                    <td><span class="diff-del">2.8%</span></td>
-                                    <td>2024-05-10</td>
-                                </tr>
+                                {{end}}
+                            {{else}}
+                                <tr><td colspan="4" class="text-muted">No data available</td></tr>
+                            {{end}}
                             </tbody>
                         </table>
                     </div>
