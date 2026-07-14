@@ -19,10 +19,10 @@ func newTestClient(t *testing.T, number int, reviewsJSON, reviewersJSON string) 
 
 	mux := http.NewServeMux()
 	mux.HandleFunc(fmt.Sprintf("/repos/argoproj/argo-rollouts/pulls/%d/reviews", number), func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, reviewsJSON)
+		_, _ = fmt.Fprint(w, reviewsJSON)
 	})
 	mux.HandleFunc(fmt.Sprintf("/repos/argoproj/argo-rollouts/pulls/%d/requested_reviewers", number), func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, reviewersJSON)
+		_, _ = fmt.Fprint(w, reviewersJSON)
 	})
 
 	server := httptest.NewServer(mux)
