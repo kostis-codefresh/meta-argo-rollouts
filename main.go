@@ -36,6 +36,10 @@ func main() {
 	ctx := context.Background()
 
 	generatedAt := time.Now()
+	if err := copyStaticAssets(); err != nil {
+		fmt.Fprintf(os.Stderr, "error copying static assets: %v\n", err)
+	}
+
 	rows := collectReleaseRows(ctx, client)
 	printReleaseRows(rows)
 	if err := renderVersionPage(rows, generatedAt); err != nil {

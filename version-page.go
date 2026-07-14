@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"html/template"
-	"io"
 	"os"
 	"strings"
 	"time"
@@ -25,25 +24,9 @@ type versionPageRow struct {
 	PublishedTitle    string
 }
 
-// renderVersionPage copies the version page's static assets and renders
-// web/version.html.tpl with the given rows into docs/version.html.
+// renderVersionPage renders web/version.html.tpl with the given rows into
+// docs/version.html.
 func renderVersionPage(rows []releaseRow, generatedAt time.Time) error {
-	if err := os.MkdirAll("docs/img", 0755); err != nil {
-		return fmt.Errorf("creating docs dir: %w", err)
-	}
-	if err := copyFile("web/dashboard.css", "docs/dashboard.css"); err != nil {
-		return fmt.Errorf("copying dashboard.css: %w", err)
-	}
-	if err := copyFile("web/img/menu.svg", "docs/img/menu.svg"); err != nil {
-		return fmt.Errorf("copying menu.svg: %w", err)
-	}
-	if err := copyFile("web/img/rollouts.png", "docs/img/rollouts.png"); err != nil {
-		return fmt.Errorf("copying rollouts.png: %w", err)
-	}
-	if err := copyFile("web/img/favicon.ico", "docs/img/favicon.ico"); err != nil {
-		return fmt.Errorf("copying favicon.ico: %w", err)
-	}
-
 	pageRows := make([]versionPageRow, 0, len(rows))
 	stableReleasesSeen := 0
 	for i, row := range rows {
@@ -100,30 +83,4 @@ func renderVersionPage(rows []releaseRow, generatedAt time.Time) error {
 	}
 
 	return tmpl.Execute(out, data)
-}
-
-// copyFile copies src to dst, overwriting dst if it already exists.
-func copyFile(src, dst string) error {
-	srcFile, err := os.Open(src)
-	if err != nil {
-		return err
-	}
-	defer closeAndLog(srcFile, src)
-
-	dstFile, err := os.Create(dst)
-	if err != nil {
-		return err
-	}
-	defer closeAndLog(dstFile, dst)
-
-	_, err = io.Copy(dstFile, srcFile)
-	return err
-}
-
-// closeAndLog closes c, logging (rather than returning) any error since callers invoke
-// this via defer where an error return can't be propagated.
-func closeAndLog(c io.Closer, path string) {
-	if err := c.Close(); err != nil {
-		fmt.Fprintf(os.Stderr, "error closing %s: %v\n", path, err)
-	}
 }

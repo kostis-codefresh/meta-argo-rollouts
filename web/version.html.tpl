@@ -21,7 +21,7 @@
             <span class="text-muted small">{{.GeneratedAt}}</span>
         </div>
         <div>
-            <img src="img/rollouts.png" alt="Argo Rollouts" class="navbar-logo">
+            <a href="https://github.com/kostis-codefresh/meta-argo-rollouts"><img src="img/rollouts.png" alt="Argo Rollouts" class="navbar-logo"></a>
         </div>
     </nav>
 
