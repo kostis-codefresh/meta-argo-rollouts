@@ -64,7 +64,7 @@
                             {{range .Rows}}
                                 <tr>
                                     <td><a href="{{.URL}}">#{{.Number}}</a></td>
-                                    <td>{{.Author}}</td>
+                                    <td><a href="{{.AuthorURL}}">{{.Author}}</a></td>
                                     <td>{{.Title}}</td>
                                     <td title="{{.OpenedTitle}}">{{.OpenedRelative}}</td>
                                     <td><span class="diff-add">+{{.Additions}}</span> / <span class="diff-del">-{{.Deletions}}</span></td>

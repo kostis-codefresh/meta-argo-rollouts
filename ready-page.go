@@ -17,6 +17,7 @@ type readyPageRow struct {
 	Number         int
 	URL            string
 	Author         string
+	AuthorURL      string
 	Title          string
 	OpenedRelative string
 	OpenedTitle    string
@@ -49,6 +50,7 @@ func renderReadyPage(rows []readyPRRow, generatedAt time.Time) error {
 			Number:         row.Number,
 			URL:            row.HTMLURL,
 			Author:         row.Author,
+			AuthorURL:      "https://github.com/" + row.Author,
 			Title:          row.Title,
 			OpenedRelative: humanize.RelTime(row.CreatedAt, generatedAt, "ago", "from now"),
 			OpenedTitle:    row.CreatedAt.Format("02 Jan 2006"),
