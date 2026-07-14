@@ -15,7 +15,7 @@ import (
 )
 
 const testingWorkflowFile = "testing.yaml"
-const slowTestTopN = 20 // durations tail off sharply past ~20; keeps the table readable
+const slowTestMinDuration = 5.0 // seconds; only tests slower than this are worth surfacing
 
 // slowTestRow is one individual e2e test case's duration from the latest completed
 // master run of the "Testing" workflow's "latest" k8s-matrix job.
@@ -30,10 +30,10 @@ var slowTestLineRe = regexp.MustCompile(`--- (PASS|FAIL): (\S+) \(([0-9.]+)s\)`)
 
 // collectSlowTestRows finds the most recent completed, successful run of the "Testing"
 // workflow on master, locates its "latest" k8s-matrix e2e job, downloads that job's raw
-// log, and returns the top slowTestTopN individual test durations by wall-clock time,
-// sorted slowest first. Never cached - this is a snapshot of the latest run, not
-// accumulated history. Any failure at any stage is logged to stderr and yields an empty
-// slice rather than aborting the program, since main.go treats each page independently.
+// log, and returns every individual test slower than slowTestMinDuration, sorted slowest
+// first. Never cached - this is a snapshot of the latest run, not accumulated history.
+// Any failure at any stage is logged to stderr and yields an empty slice rather than
+// aborting the program, since main.go treats each page independently.
 func collectSlowTestRows(ctx context.Context, client *github.Client) []slowTestRow {
 	runID, ok := findLatestMasterRunID(ctx, client)
 	if !ok {
@@ -51,11 +51,13 @@ func collectSlowTestRows(ctx context.Context, client *github.Client) []slowTestR
 		return nil
 	}
 
-	rows := parseSlowTests(logText)
-	sort.Slice(rows, func(i, j int) bool { return rows[i].DurationSeconds > rows[j].DurationSeconds })
-	if len(rows) > slowTestTopN {
-		rows = rows[:slowTestTopN]
+	var rows []slowTestRow
+	for _, row := range parseSlowTests(logText) {
+		if row.DurationSeconds > slowTestMinDuration {
+			rows = append(rows, row)
+		}
 	}
+	sort.Slice(rows, func(i, j int) bool { return rows[i].DurationSeconds > rows[j].DurationSeconds })
 	return rows
 }
 
