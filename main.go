@@ -61,6 +61,12 @@ func main() {
 		fmt.Fprintf(os.Stderr, "error rendering critical page: %v\n", err)
 	}
 
+	slowRows := collectSlowTestRows(ctx, client)
+	printSlowTestRows(slowRows)
+	if err := renderSlowPage(slowRows, generatedAt); err != nil {
+		fmt.Fprintf(os.Stderr, "error rendering slow tests page: %v\n", err)
+	}
+
 	rateLimits, _, err := client.RateLimit.Get(ctx)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error fetching rate limits: %v\n", err)
