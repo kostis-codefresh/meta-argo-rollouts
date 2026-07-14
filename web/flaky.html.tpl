@@ -44,6 +44,12 @@
         </div>
 
         <div class="row g-3">
+            <div class="col-md-6">
+                <div class="card gcp-card p-4">
+                    <h6 class="text-muted text-uppercase small fw-bold">Tests that fail all the time</h6>
+                    <p class="mb-0">The table shows tests that failed in the last 10 runs of CI builds only in master</p>
+                </div>
+            </div>
             <div class="col-12">
                 <div class="card gcp-card">
                     <div class="gcp-table-header">

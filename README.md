@@ -1,4 +1,4 @@
-# meta-argo-rollouts
+# Argo Rollouts Meta
 
 Automatic reporting for key statistics for [Argo Rollouts](https://github.com/argoproj/argo-rollouts).
 

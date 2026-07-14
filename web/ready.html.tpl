@@ -44,6 +44,12 @@
         </div>
 
         <div class="row g-3">
+            <div class="col-md-6">
+                <div class="card gcp-card p-4">
+                    <h6 class="text-muted text-uppercase small fw-bold">PRs ready for review</h6>
+                    <p class="mb-0">The table shows PRs that have no conflict, pass all the status checks and have no existing review</p>
+                </div>
+            </div>
             <div class="col-12">
                 <div class="card gcp-card">
                     <div class="gcp-table-header">

@@ -44,6 +44,12 @@
         </div>
 
         <div class="row g-3">
+            <div class="col-md-6">
+                <div class="card gcp-card p-4">
+                    <h6 class="text-muted text-uppercase small fw-bold">Super slow tests</h6>
+                    <p class="mb-0">The table shows tests that take more than 5 seconds in the last CI run for the master branch</p>
+                </div>
+            </div>
             <div class="col-12">
                 <div class="card gcp-card">
                     <div class="gcp-table-header">
