@@ -18,10 +18,10 @@ type readyPageRow struct {
 	URL            string
 	Author         string
 	Title          string
-	ChecksLabel    string
-	ChecksClass    string
 	OpenedRelative string
 	OpenedTitle    string
+	Additions      int
+	Deletions      int
 }
 
 // renderReadyPage copies the ready page's static assets and renders
@@ -50,10 +50,10 @@ func renderReadyPage(rows []readyPRRow, generatedAt time.Time) error {
 			URL:            row.HTMLURL,
 			Author:         row.Author,
 			Title:          row.Title,
-			ChecksLabel:    "Passed",
-			ChecksClass:    "status-pill status-success",
 			OpenedRelative: humanize.RelTime(row.CreatedAt, generatedAt, "ago", "from now"),
 			OpenedTitle:    row.CreatedAt.Format("02 Jan 2006"),
+			Additions:      row.Additions,
+			Deletions:      row.Deletions,
 		})
 	}
 

@@ -56,8 +56,8 @@
                                     <th>PR</th>
                                     <th>Author</th>
                                     <th>Description</th>
-                                    <th>Checks</th>
-                                    <th>Opened</th>
+                                    <th>Date Opened</th>
+                                    <th>Size</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -66,8 +66,8 @@
                                     <td><a href="{{.URL}}">#{{.Number}}</a></td>
                                     <td>{{.Author}}</td>
                                     <td>{{.Title}}</td>
-                                    <td><span class="{{.ChecksClass}}">{{.ChecksLabel}}</span></td>
                                     <td title="{{.OpenedTitle}}">{{.OpenedRelative}}</td>
+                                    <td><span class="diff-add">+{{.Additions}}</span> / <span class="diff-del">-{{.Deletions}}</span></td>
                                 </tr>
                             {{end}}
                             </tbody>
