@@ -12,8 +12,8 @@ import (
 const perPageMax = 100
 
 // readyPRRow is one open PR with no merge conflicts, all checks passing, and
-// either no reviews yet or an outstanding review request (someone was asked,
-// or re-asked, to review).
+// no approval yet (a PR with changes requested is excluded too, unless the
+// author has since re-requested review).
 type readyPRRow struct {
 	Number    int
 	Title     string
@@ -25,9 +25,10 @@ type readyPRRow struct {
 }
 
 // collectReadyPRRows fetches all open PRs and keeps only those with no merge
-// conflicts, all checks passing, and either no reviews yet or an outstanding
-// review request. Always live — no on-disk cache, since this state is
-// transient (unlike immutable releases).
+// conflicts, all checks passing, and no approval yet (a PR with changes
+// requested is excluded too, unless the author has since re-requested
+// review). Always live — no on-disk cache, since this state is transient
+// (unlike immutable releases).
 func collectReadyPRRows(ctx context.Context, client *github.Client) []readyPRRow {
 	prs := listAllOpenPRs(ctx, client)
 
@@ -122,9 +123,10 @@ func checkReadyToMerge(ctx context.Context, client *github.Client, pr *github.Pu
 	return full, true
 }
 
-// needsReview reports whether the PR either has no reviews yet (brand new)
-// or has an outstanding review request (someone has been asked, or re-asked
-// after addressing feedback, to review).
+// needsReview reports whether the PR still needs a human verdict: no
+// reviews yet, only comments so far, or changes were requested and the
+// author has since re-requested review. An approval by anyone hides the PR
+// permanently, regardless of any other outstanding review requests.
 func needsReview(ctx context.Context, client *github.Client, number int) bool {
 	reviews, _, err := client.PullRequests.ListReviews(ctx, "argoproj", "argo-rollouts", number, &github.ListOptions{PerPage: perPageMax})
 	if err != nil {
@@ -132,6 +134,19 @@ func needsReview(ctx context.Context, client *github.Client, number int) bool {
 		return false
 	}
 	if len(reviews) == 0 {
+		return true
+	}
+
+	changesRequested := false
+	for _, review := range reviews {
+		switch review.GetState() {
+		case "APPROVED":
+			return false
+		case "CHANGES_REQUESTED":
+			changesRequested = true
+		}
+	}
+	if !changesRequested {
 		return true
 	}
 
