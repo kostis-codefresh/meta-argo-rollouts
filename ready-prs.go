@@ -50,6 +50,24 @@ func collectReadyPRRows(ctx context.Context, client *github.Client) []readyPRRow
 	return rows
 }
 
+// excludeCritical removes any row whose PR number also appears among the
+// critical rows, so a PR classified as Critical isn't duplicated on the
+// Ready page.
+func excludeCritical(readyRows []readyPRRow, criticalRows []criticalPRRow) []readyPRRow {
+	critical := make(map[int]bool, len(criticalRows))
+	for _, c := range criticalRows {
+		critical[c.Number] = true
+	}
+	var rows []readyPRRow
+	for _, r := range readyRows {
+		if critical[r.Number] {
+			continue
+		}
+		rows = append(rows, r)
+	}
+	return rows
+}
+
 // listAllOpenPRs pages through every open PR against argoproj/argo-rollouts.
 func listAllOpenPRs(ctx context.Context, client *github.Client) []*github.PullRequest {
 	var all []*github.PullRequest

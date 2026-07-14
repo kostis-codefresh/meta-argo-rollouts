@@ -48,12 +48,15 @@ func main() {
 
 	readyRows := collectReadyPRRows(ctx, client)
 	printReadyPRRows(readyRows)
-	if err := renderReadyPage(readyRows, generatedAt); err != nil {
-		fmt.Fprintf(os.Stderr, "error rendering ready page: %v\n", err)
-	}
 
 	criticalRows := collectCriticalPRRows(ctx, client, readyRows)
 	printCriticalPRRows(criticalRows)
+
+	readyOnlyRows := excludeCritical(readyRows, criticalRows)
+	if err := renderReadyPage(readyOnlyRows, generatedAt); err != nil {
+		fmt.Fprintf(os.Stderr, "error rendering ready page: %v\n", err)
+	}
+
 	if err := renderCriticalPage(criticalRows, generatedAt); err != nil {
 		fmt.Fprintf(os.Stderr, "error rendering critical page: %v\n", err)
 	}
