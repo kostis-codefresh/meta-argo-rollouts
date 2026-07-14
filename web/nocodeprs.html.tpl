@@ -31,8 +31,8 @@
         <ul class="nav flex-column gap-1">
             <li class="nav-item"><a class="nav-link text-muted p-2" href="index.html">Dashboard</a></li>
             <li class="nav-item"><a class="nav-link text-muted p-2" href="critical.html">Critical PRs</a></li>
-            <li class="nav-item"><a class="nav-link text-dark active fw-medium p-2 rounded nav-link-active" href="ready.html">Ready PRs</a></li>
-            <li class="nav-item"><a class="nav-link text-muted p-2" href="nocodeprs.html">Doc PRs</a></li>
+            <li class="nav-item"><a class="nav-link text-muted p-2" href="ready.html">Ready PRs</a></li>
+            <li class="nav-item"><a class="nav-link text-dark active fw-medium p-2 rounded nav-link-active" href="nocodeprs.html">Doc PRs</a></li>
             <li class="nav-item"><a class="nav-link text-muted p-2" href="slow.html">Slow tests</a></li>
             <li class="nav-item"><a class="nav-link text-muted p-2" href="flaky.html">Flaky tests</a></li>
             <li class="nav-item"><a class="nav-link text-muted p-2" href="version.html">K8s versions</a></li>
@@ -41,20 +41,20 @@
 
     <div class="main-content">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h4 class="mb-0 fw-normal">Ready PRs</h4>
+            <h4 class="mb-0 fw-normal">Doc PRs</h4>
         </div>
 
         <div class="row g-3">
             <div class="col-md-6">
                 <div class="card gcp-card p-4">
-                    <h6 class="text-muted text-uppercase small fw-bold">PRs ready for review</h6>
-                    <p class="mb-0">The table shows PRs that have no conflict, pass all the status checks, and haven't been approved yet (PRs with changes requested are hidden until the author re-requests review)</p>
+                    <h6 class="text-muted text-uppercase small fw-bold">Documentation PRs</h6>
+                    <p class="mb-0">The table has PRs that only affect documentation resources and do not affect code functionality</p>
                 </div>
             </div>
             <div class="col-12">
                 <div class="card gcp-card">
                     <div class="gcp-table-header">
-                        <h6 class="text-muted text-uppercase small fw-bold mb-0">Pull Requests Ready to Merge</h6>
+                        <h6 class="text-muted text-uppercase small fw-bold mb-0">Documentation Pull Requests</h6>
                     </div>
                     <div class="table-responsive">
                         <table class="gcp-table">

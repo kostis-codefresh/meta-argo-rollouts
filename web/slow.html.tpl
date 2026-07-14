@@ -32,6 +32,7 @@
             <li class="nav-item"><a class="nav-link text-muted p-2" href="index.html">Dashboard</a></li>
             <li class="nav-item"><a class="nav-link text-muted p-2" href="critical.html">Critical PRs</a></li>
             <li class="nav-item"><a class="nav-link text-muted p-2" href="ready.html">Ready PRs</a></li>
+            <li class="nav-item"><a class="nav-link text-muted p-2" href="nocodeprs.html">Doc PRs</a></li>
             <li class="nav-item"><a class="nav-link text-dark active fw-medium p-2 rounded nav-link-active" href="slow.html">Slow tests</a></li>
             <li class="nav-item"><a class="nav-link text-muted p-2" href="flaky.html">Flaky tests</a></li>
             <li class="nav-item"><a class="nav-link text-muted p-2" href="version.html">K8s versions</a></li>
