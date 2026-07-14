@@ -53,6 +53,15 @@
                 </div>
             </div>
         </div>
+
+        <div class="row g-3 mt-3">
+            <div class="col-md-6">
+                <div class="card gcp-card p-4">
+                    <h6 class="text-muted text-uppercase small fw-bold">PR breakdown</h6>
+                    <p class="mb-0">Critical PRs {{.CriticalPRCount}}, Ready PRs {{.ReadyPRCount}}, Doc PRs {{.DocPRCount}}</p>
+                </div>
+            </div>
+        </div>
     </div>
 
 </body>

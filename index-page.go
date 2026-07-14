@@ -13,7 +13,7 @@ const indexPageOutput = "docs/index.html"
 
 // renderIndexPage renders web/index.html.tpl with the given rows into
 // docs/index.html.
-func renderIndexPage(rows []releaseRow, generatedAt time.Time) error {
+func renderIndexPage(rows []releaseRow, generatedAt time.Time, criticalCount, readyCount, docCount int) error {
 	totalReleases := len(rows) - 1
 
 	lastReleaseTag, releasedOn := latestStableRelease(rows)
@@ -30,15 +30,21 @@ func renderIndexPage(rows []releaseRow, generatedAt time.Time) error {
 	defer closeAndLog(out, indexPageOutput)
 
 	data := struct {
-		TotalReleases int
-		LastRelease   string
-		ReleasedOn    string
-		GeneratedAt   string
+		TotalReleases   int
+		LastRelease     string
+		ReleasedOn      string
+		GeneratedAt     string
+		CriticalPRCount int
+		ReadyPRCount    int
+		DocPRCount      int
 	}{
-		TotalReleases: totalReleases,
-		LastRelease:   lastReleaseTag,
-		ReleasedOn:    releasedOn.Format("2 Jan 2006"),
-		GeneratedAt:   generatedAt.UTC().Format("02 Jan 2006 15:04 MST"),
+		TotalReleases:   totalReleases,
+		LastRelease:     lastReleaseTag,
+		ReleasedOn:      releasedOn.Format("2 Jan 2006"),
+		GeneratedAt:     generatedAt.UTC().Format("02 Jan 2006 15:04 MST"),
+		CriticalPRCount: criticalCount,
+		ReadyPRCount:    readyCount,
+		DocPRCount:      docCount,
 	}
 
 	return tmpl.Execute(out, data)

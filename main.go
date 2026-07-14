@@ -47,10 +47,6 @@ func main() {
 		fmt.Fprintf(os.Stderr, "error rendering version page: %v\n", err)
 	}
 
-	if err := renderIndexPage(rows, generatedAt); err != nil {
-		fmt.Fprintf(os.Stderr, "error rendering index page: %v\n", err)
-	}
-
 	readyRows := collectReadyPRRows(ctx, client)
 	printReadyPRRows(readyRows)
 
@@ -62,6 +58,10 @@ func main() {
 
 	readyOnlyRows := excludeCritical(readyRows, criticalRows)
 	readyOnlyRows = excludeDocOnly(readyOnlyRows, docRows)
+
+	if err := renderIndexPage(rows, generatedAt, len(criticalRows), len(readyOnlyRows), len(docRows)); err != nil {
+		fmt.Fprintf(os.Stderr, "error rendering index page: %v\n", err)
+	}
 	if err := renderReadyPage(readyOnlyRows, generatedAt); err != nil {
 		fmt.Fprintf(os.Stderr, "error rendering ready page: %v\n", err)
 	}
