@@ -13,7 +13,8 @@ const perPageMax = 100
 
 // readyPRRow is one open PR with no merge conflicts, all checks passing, and
 // no approval yet (a PR with changes requested is excluded too, unless the
-// author has since re-requested review).
+// author has since re-requested review from the same reviewer who requested
+// changes).
 type readyPRRow struct {
 	Number    int
 	Title     string
@@ -26,9 +27,9 @@ type readyPRRow struct {
 
 // collectReadyPRRows fetches all open PRs and keeps only those with no merge
 // conflicts, all checks passing, and no approval yet (a PR with changes
-// requested is excluded too, unless the author has since re-requested
-// review). Always live — no on-disk cache, since this state is transient
-// (unlike immutable releases).
+// requested is excluded too, unless the author has since re-requested review
+// from the same reviewer who requested changes). Always live — no on-disk
+// cache, since this state is transient (unlike immutable releases).
 func collectReadyPRRows(ctx context.Context, client *github.Client) []readyPRRow {
 	prs := listAllOpenPRs(ctx, client)
 
@@ -125,8 +126,9 @@ func checkReadyToMerge(ctx context.Context, client *github.Client, pr *github.Pu
 
 // needsReview reports whether the PR still needs a human verdict: no
 // reviews yet, only comments so far, or changes were requested and the
-// author has since re-requested review. An approval by anyone hides the PR
-// permanently, regardless of any other outstanding review requests.
+// same reviewer who requested them has since been re-requested. An approval
+// by anyone hides the PR permanently, regardless of any other outstanding
+// review requests.
 func needsReview(ctx context.Context, client *github.Client, number int) bool {
 	reviews, _, err := client.PullRequests.ListReviews(ctx, "argoproj", "argo-rollouts", number, &github.ListOptions{PerPage: perPageMax})
 	if err != nil {
@@ -137,16 +139,16 @@ func needsReview(ctx context.Context, client *github.Client, number int) bool {
 		return true
 	}
 
-	changesRequested := false
+	changesRequestedBy := map[string]bool{}
 	for _, review := range reviews {
 		switch review.GetState() {
 		case "APPROVED":
 			return false
 		case "CHANGES_REQUESTED":
-			changesRequested = true
+			changesRequestedBy[review.GetUser().GetLogin()] = true
 		}
 	}
-	if !changesRequested {
+	if len(changesRequestedBy) == 0 {
 		return true
 	}
 
@@ -155,7 +157,12 @@ func needsReview(ctx context.Context, client *github.Client, number int) bool {
 		fmt.Fprintf(os.Stderr, "error fetching requested reviewers for PR #%d: %v\n", number, err)
 		return false
 	}
-	return len(reviewers.Users) != 0 || len(reviewers.Teams) != 0
+	for _, user := range reviewers.Users {
+		if changesRequestedBy[user.GetLogin()] {
+			return true
+		}
+	}
+	return false
 }
 
 // allChecksPassed reports whether check runs exist for the ref and every one
