@@ -20,6 +20,7 @@ type versionPageRow struct {
 	SupportStatus     string
 	SupportClass      string
 	VersionsDisplay   string
+	VersionsURL       string
 	PublishedRelative string
 	PublishedTitle    string
 }
@@ -31,8 +32,12 @@ func renderVersionPage(rows []releaseRow, generatedAt time.Time) error {
 	stableReleasesSeen := 0
 	for i, row := range rows {
 		versionsDisplay := "No data"
+		versionsURL := ""
 		if len(row.K8sVersions) > 0 {
 			versionsDisplay = strings.Join(row.K8sVersions, ", ")
+			if row.WorkflowPath != "" {
+				versionsURL = fmt.Sprintf("https://github.com/argoproj/argo-rollouts/blob/%s/%s#L%d", row.Tag, row.WorkflowPath, row.WorkflowLine)
+			}
 		}
 
 		isRC := strings.Contains(strings.ToLower(row.Tag), "rc")
@@ -58,6 +63,7 @@ func renderVersionPage(rows []releaseRow, generatedAt time.Time) error {
 			SupportStatus:     supportStatus,
 			SupportClass:      supportClass,
 			VersionsDisplay:   versionsDisplay,
+			VersionsURL:       versionsURL,
 			PublishedRelative: humanize.RelTime(row.PublishedAt, generatedAt, "ago", "from now"),
 			PublishedTitle:    row.PublishedAt.Format("02 Jan 2006"),
 		})

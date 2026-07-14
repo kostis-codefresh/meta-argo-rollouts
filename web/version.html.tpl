@@ -70,7 +70,7 @@
                                 <tr>
                                     <td>{{if .URL}}<a href="{{.URL}}">{{.Tag}}</a>{{else}}{{.Tag}}{{end}}</td>
                                     <td><span class="{{.SupportClass}}">&#9679; {{.SupportStatus}}</span></td>
-                                    <td>{{.VersionsDisplay}}</td>
+                                    <td>{{if .VersionsURL}}<a href="{{.VersionsURL}}">{{.VersionsDisplay}}</a>{{else}}{{.VersionsDisplay}}{{end}}</td>
                                     <td title="{{.PublishedTitle}}">{{.PublishedRelative}}</td>
                                 </tr>
                             {{end}}

@@ -21,9 +21,11 @@ const k8sVersionsCacheFile = "k8s-versions.json"
 
 // cachedRelease is the on-disk record for a single release, keyed by tag in the cache file.
 type cachedRelease struct {
-	Name        string    `json:"name"`
-	PublishedAt time.Time `json:"published_at"`
-	K8sVersions []string  `json:"k8s_versions"`
+	Name         string    `json:"name"`
+	PublishedAt  time.Time `json:"published_at"`
+	K8sVersions  []string  `json:"k8s_versions"`
+	WorkflowPath string    `json:"workflow_path"`
+	WorkflowLine int       `json:"workflow_line"`
 }
 
 // loadCache reads the k8s-versions cache from disk, returning an empty map on a cold
@@ -43,22 +45,27 @@ const releaseCount = 30
 
 // releaseRow is one entry (the master branch or a release) with its k8s test matrix.
 type releaseRow struct {
-	Tag         string
-	Name        string
-	PublishedAt time.Time
-	K8sVersions []string
-	HTMLURL     string
+	Tag          string
+	Name         string
+	PublishedAt  time.Time
+	K8sVersions  []string
+	WorkflowPath string
+	WorkflowLine int
+	HTMLURL      string
 }
 
 // collectReleaseRows fetches the master branch (always fresh, never cached) followed by
 // the last 30 argoproj/argo-rollouts releases (using the on-disk cache), returning one
 // row per entry with master first.
 func collectReleaseRows(ctx context.Context, client *github.Client) []releaseRow {
+	masterVersions := fetchK8sVersions(ctx, client, "master")
 	rows := []releaseRow{{
-		Tag:         "master",
-		Name:        "HEAD",
-		PublishedAt: fetchMasterCommitDate(ctx, client),
-		K8sVersions: fetchK8sVersions(ctx, client, "master"),
+		Tag:          "master",
+		Name:         "HEAD",
+		PublishedAt:  fetchMasterCommitDate(ctx, client),
+		K8sVersions:  masterVersions.Versions,
+		WorkflowPath: masterVersions.Path,
+		WorkflowLine: masterVersions.Line,
 	}}
 
 	opts := &github.ListOptions{PerPage: releaseCount}
@@ -73,15 +80,26 @@ func collectReleaseRows(ctx context.Context, client *github.Client) []releaseRow
 	for _, r := range releases {
 		tag := r.GetTagName()
 		entry, ok := cache[tag]
-		if !ok {
+		if !ok || (len(entry.K8sVersions) > 0 && entry.WorkflowPath == "") {
+			result := fetchK8sVersions(ctx, client, tag)
 			entry = cachedRelease{
-				Name:        r.GetName(),
-				PublishedAt: r.GetPublishedAt().Time,
-				K8sVersions: fetchK8sVersions(ctx, client, tag),
+				Name:         r.GetName(),
+				PublishedAt:  r.GetPublishedAt().Time,
+				K8sVersions:  result.Versions,
+				WorkflowPath: result.Path,
+				WorkflowLine: result.Line,
 			}
 			cache[tag] = entry
 		}
-		rows = append(rows, releaseRow{Tag: tag, Name: entry.Name, PublishedAt: entry.PublishedAt, K8sVersions: entry.K8sVersions, HTMLURL: r.GetHTMLURL()})
+		rows = append(rows, releaseRow{
+			Tag:          tag,
+			Name:         entry.Name,
+			PublishedAt:  entry.PublishedAt,
+			K8sVersions:  entry.K8sVersions,
+			WorkflowPath: entry.WorkflowPath,
+			WorkflowLine: entry.WorkflowLine,
+			HTMLURL:      r.GetHTMLURL(),
+		})
 	}
 
 	saveCache(cache)
@@ -110,9 +128,17 @@ func printReleaseRows(rows []releaseRow) {
 	}
 }
 
+// k8sVersionsResult holds the Kubernetes versions extracted from a workflow file along
+// with where they were found, so the version page can link back to the exact matrix line.
+type k8sVersionsResult struct {
+	Versions []string
+	Path     string
+	Line     int
+}
+
 // fetchK8sVersions returns the Kubernetes versions covered by the e2e test matrix
 // at the given ref, trying testing.yaml first and falling back to the older e2e.yaml.
-func fetchK8sVersions(ctx context.Context, client *github.Client, ref string) []string {
+func fetchK8sVersions(ctx context.Context, client *github.Client, ref string) k8sVersionsResult {
 	for _, path := range workflowFiles {
 		content, _, resp, err := client.Repositories.GetContents(ctx, "argoproj", "argo-rollouts", path, &github.RepositoryContentGetOptions{Ref: ref})
 		if err != nil {
@@ -134,41 +160,43 @@ func fetchK8sVersions(ctx context.Context, client *github.Client, ref string) []
 			continue
 		}
 
-		if versions := findKubernetesVersions(&doc); len(versions) > 0 {
-			return versions
+		if versions, line := findKubernetesVersions(&doc); len(versions) > 0 {
+			return k8sVersionsResult{Versions: versions, Path: path, Line: line}
 		}
 	}
-	return nil
+	return k8sVersionsResult{}
 }
 
 // findKubernetesVersions recursively walks a YAML tree looking for a "matrix" mapping
-// that contains a key whose name includes "kubernetes", and extracts its versions.
-func findKubernetesVersions(node *yaml.Node) []string {
+// that contains a key whose name includes "kubernetes", and extracts its versions along
+// with the line number of that key.
+func findKubernetesVersions(node *yaml.Node) ([]string, int) {
 	if node.Kind == yaml.MappingNode {
 		for i := 0; i < len(node.Content); i += 2 {
 			key, value := node.Content[i], node.Content[i+1]
 			if key.Value == "matrix" && value.Kind == yaml.MappingNode {
-				if versions := extractFromMatrix(value); len(versions) > 0 {
-					return versions
+				if versions, line := extractFromMatrix(value); len(versions) > 0 {
+					return versions, line
 				}
 			}
-			if versions := findKubernetesVersions(value); len(versions) > 0 {
-				return versions
+			if versions, line := findKubernetesVersions(value); len(versions) > 0 {
+				return versions, line
 			}
 		}
-		return nil
+		return nil, 0
 	}
 	for _, child := range node.Content {
-		if versions := findKubernetesVersions(child); len(versions) > 0 {
-			return versions
+		if versions, line := findKubernetesVersions(child); len(versions) > 0 {
+			return versions, line
 		}
 	}
-	return nil
+	return nil, 0
 }
 
 // extractFromMatrix scans a matrix mapping for a kubernetes-related key and returns
-// its versions, handling both a list of {version: ...} objects and a flat scalar list.
-func extractFromMatrix(matrix *yaml.Node) []string {
+// its versions and the key's line number, handling both a list of {version: ...} objects
+// and a flat scalar list.
+func extractFromMatrix(matrix *yaml.Node) ([]string, int) {
 	for i := 0; i < len(matrix.Content); i += 2 {
 		key, value := matrix.Content[i], matrix.Content[i+1]
 		if strings.Contains(strings.ToLower(key.Value), "kubernetes") && value.Kind == yaml.SequenceNode {
@@ -176,10 +204,10 @@ func extractFromMatrix(matrix *yaml.Node) []string {
 			for _, item := range value.Content {
 				versions = append(versions, extractVersion(item))
 			}
-			return versions
+			return versions, key.Line
 		}
 	}
-	return nil
+	return nil, 0
 }
 
 // extractVersion returns the raw scalar version string from a matrix entry, whether
