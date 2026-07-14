@@ -30,9 +30,9 @@
     <div class="gcp-sidebar p-3">
         <ul class="nav flex-column gap-1">
             <li class="nav-item"><a class="nav-link text-muted p-2" href="index.html">Dashboard</a></li>
-            <li class="nav-item"><a class="nav-link text-dark active fw-medium p-2 rounded nav-link-active" href="critical.html">Critical PRs</a></li>
+            <li class="nav-item"><a class="nav-link text-muted p-2" href="critical.html">Critical PRs</a></li>
             <li class="nav-item"><a class="nav-link text-muted p-2" href="ready.html">Ready PRs</a></li>
-            <li class="nav-item"><a class="nav-link text-muted p-2" href="nocodeprs.html">Doc PRs</a></li>
+            <li class="nav-item"><a class="nav-link text-dark active fw-medium p-2 rounded nav-link-active" href="nocodeprs.html">Doc PRs</a></li>
             <li class="nav-item"><a class="nav-link text-muted p-2" href="slow.html">Slow tests</a></li>
             <li class="nav-item"><a class="nav-link text-muted p-2" href="flaky.html">Flaky tests</a></li>
             <li class="nav-item"><a class="nav-link text-muted p-2" href="version.html">K8s versions</a></li>
@@ -41,20 +41,20 @@
 
     <div class="main-content">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h4 class="mb-0 fw-normal">Critical PRs</h4>
+            <h4 class="mb-0 fw-normal">Doc PRs</h4>
         </div>
 
         <div class="row g-3">
             <div class="col-md-6">
                 <div class="card gcp-card p-4">
-                    <h6 class="text-muted text-uppercase small fw-bold">PRs that change tests</h6>
-                    <p class="mb-0">The table shows PRs that modify or remove code from existing unit/e2e tests. They potentially break backwards compatibility</p>
+                    <h6 class="text-muted text-uppercase small fw-bold">Documentation PRs</h6>
+                    <p class="mb-0">The table has PRs that only affect documentation resources and do not affect code functionality</p>
                 </div>
             </div>
             <div class="col-12">
                 <div class="card gcp-card">
                     <div class="gcp-table-header">
-                        <h6 class="text-muted text-uppercase small fw-bold mb-0">Critical Pull Requests</h6>
+                        <h6 class="text-muted text-uppercase small fw-bold mb-0">Documentation Pull Requests</h6>
                     </div>
                     <div class="table-responsive">
                         <table class="gcp-table">
@@ -68,14 +68,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            
-                                <tr>
-                                    <td><a href="https://github.com/argoproj/argo-rollouts/pull/4823">#4823</a></td>
-                                    <td><a href="https://github.com/ChanghwanK">ChanghwanK</a></td>
-                                    <td>fix(trafficrouting): do not block abort/progressDeadline when Istio delays DestinationRule switch. Fixes #4626</td>
-                                    <td title="03 Jul 2026">1 week ago</td>
-                                    <td><span class="diff-add">+139</span> / <span class="diff-del">-3</span></td>
-                                </tr>
                             
                             </tbody>
                         </table>
