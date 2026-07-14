@@ -36,7 +36,11 @@ type masterRun struct {
 // or log can't be fetched is skipped rather than aborting the whole
 // collection.
 func collectFlakyTestRows(ctx context.Context, client *github.Client) []flakyTestRow {
+	start := time.Now()
+	fmt.Println("Starting to collect flaky tests")
+
 	runs := findRecentMasterRuns(ctx, client, flakyRunCount)
+	fmt.Printf("Found %d total master runs to sample\n", len(runs))
 
 	failures := map[string]*flakyTestRow{}
 	sampledRuns := 0
@@ -85,6 +89,7 @@ func collectFlakyTestRows(ctx context.Context, client *github.Client) []flakyTes
 
 	sort.Slice(rows, func(i, j int) bool { return flakyLess(rows[i], rows[j]) })
 
+	fmt.Printf("Finished flaky test step after %s\n", time.Since(start))
 	return rows
 }
 

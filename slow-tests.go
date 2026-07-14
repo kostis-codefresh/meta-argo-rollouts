@@ -10,6 +10,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/google/go-github/v66/github"
 )
@@ -35,6 +36,9 @@ var slowTestLineRe = regexp.MustCompile(`--- (PASS|FAIL): (\S+) \(([0-9.]+)s\)`)
 // Any failure at any stage is logged to stderr and yields an empty slice rather than
 // aborting the program, since main.go treats each page independently.
 func collectSlowTestRows(ctx context.Context, client *github.Client) []slowTestRow {
+	start := time.Now()
+	fmt.Println("Starting to collect slow tests")
+
 	runID, ok := findLatestMasterRunID(ctx, client)
 	if !ok {
 		return nil
@@ -51,13 +55,17 @@ func collectSlowTestRows(ctx context.Context, client *github.Client) []slowTestR
 		return nil
 	}
 
+	parsed := parseSlowTests(logText)
+	fmt.Printf("Found %d total tests in log\n", len(parsed))
+
 	var rows []slowTestRow
-	for _, row := range parseSlowTests(logText) {
+	for _, row := range parsed {
 		if row.DurationSeconds > slowTestMinDuration {
 			rows = append(rows, row)
 		}
 	}
 	sort.Slice(rows, func(i, j int) bool { return rows[i].DurationSeconds > rows[j].DurationSeconds })
+	fmt.Printf("Finished slow test step after %s\n", time.Since(start))
 	return rows
 }
 

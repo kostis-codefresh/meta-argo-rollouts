@@ -58,6 +58,9 @@ type releaseRow struct {
 // the last 30 argoproj/argo-rollouts releases (using the on-disk cache), returning one
 // row per entry with master first.
 func collectReleaseRows(ctx context.Context, client *github.Client) []releaseRow {
+	start := time.Now()
+	fmt.Println("Starting to collect releases")
+
 	masterVersions := fetchK8sVersions(ctx, client, "master")
 	rows := []releaseRow{{
 		Tag:          "master",
@@ -74,6 +77,8 @@ func collectReleaseRows(ctx context.Context, client *github.Client) []releaseRow
 		fmt.Fprintf(os.Stderr, "error fetching releases: %v\n", err)
 		os.Exit(1)
 	}
+
+	fmt.Printf("Found %d total releases\n", len(releases))
 
 	cache := loadCache()
 
@@ -104,6 +109,7 @@ func collectReleaseRows(ctx context.Context, client *github.Client) []releaseRow
 
 	saveCache(cache)
 
+	fmt.Printf("Finished release collection step after %s\n", time.Since(start))
 	return rows
 }
 

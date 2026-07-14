@@ -26,6 +26,10 @@ type docPRRow struct {
 // collectDocPRRows narrows the already-filtered ready PRs down to those that
 // only touch documentation files.
 func collectDocPRRows(ctx context.Context, client *github.Client, readyRows []readyPRRow) []docPRRow {
+	start := time.Now()
+	fmt.Println("Starting to collect doc-only PRs")
+	fmt.Printf("Found %d ready PRs to check\n", len(readyRows))
+
 	var rows []docPRRow
 	for _, r := range readyRows {
 		if !isDocOnly(ctx, client, r.Number) {
@@ -33,6 +37,7 @@ func collectDocPRRows(ctx context.Context, client *github.Client, readyRows []re
 		}
 		rows = append(rows, docPRRow(r))
 	}
+	fmt.Printf("Finished doc-only PR step after %s\n", time.Since(start))
 	return rows
 }
 

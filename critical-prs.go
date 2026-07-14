@@ -26,6 +26,10 @@ type criticalPRRow struct {
 // collectCriticalPRRows narrows the already-filtered ready PRs down to those
 // that delete code in a unit or integration test file.
 func collectCriticalPRRows(ctx context.Context, client *github.Client, readyRows []readyPRRow) []criticalPRRow {
+	start := time.Now()
+	fmt.Println("Starting to collect critical PRs")
+	fmt.Printf("Found %d ready PRs to check\n", len(readyRows))
+
 	var rows []criticalPRRow
 	for _, r := range readyRows {
 		if !removesTestCode(ctx, client, r.Number) {
@@ -33,6 +37,7 @@ func collectCriticalPRRows(ctx context.Context, client *github.Client, readyRows
 		}
 		rows = append(rows, criticalPRRow(r))
 	}
+	fmt.Printf("Finished critical PR step after %s\n", time.Since(start))
 	return rows
 }
 

@@ -31,7 +31,11 @@ type readyPRRow struct {
 // from the same reviewer who requested changes). Always live — no on-disk
 // cache, since this state is transient (unlike immutable releases).
 func collectReadyPRRows(ctx context.Context, client *github.Client) []readyPRRow {
+	start := time.Now()
+	fmt.Println("Starting to collect ready PRs")
+
 	prs := listAllOpenPRs(ctx, client)
+	fmt.Printf("Found %d total PRs\n", len(prs))
 
 	var rows []readyPRRow
 	for _, pr := range prs {
@@ -49,6 +53,7 @@ func collectReadyPRRows(ctx context.Context, client *github.Client) []readyPRRow
 			Deletions: full.GetDeletions(),
 		})
 	}
+	fmt.Printf("Finished ready PR step after %s\n", time.Since(start))
 	return rows
 }
 
