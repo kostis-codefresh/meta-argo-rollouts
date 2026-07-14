@@ -40,22 +40,8 @@ func renderVersionPage(rows []releaseRow, generatedAt time.Time) error {
 			}
 		}
 
-		isRC := strings.Contains(strings.ToLower(row.Tag), "rc")
-
-		supportStatus := "Unsupported"
-		supportClass := "diff-del"
-		if i > 0 && !isRC {
-			stableReleasesSeen++
-			switch stableReleasesSeen {
-			case 1:
-				supportStatus = "Supported"
-				supportClass = "diff-add"
-			case 2:
-				supportStatus = "Best-effort"
-				supportClass = "text-muted"
-			}
-		}
-		// master (i == 0), rc releases, and stable releases beyond the latest two fall through to Unsupported.
+		var supportStatus, supportClass string
+		supportStatus, supportClass, stableReleasesSeen = supportTier(i, row.Tag, stableReleasesSeen)
 
 		pageRows = append(pageRows, versionPageRow{
 			Tag:               row.Tag,
@@ -89,4 +75,22 @@ func renderVersionPage(rows []releaseRow, generatedAt time.Time) error {
 	}
 
 	return tmpl.Execute(out, data)
+}
+
+// supportTier classifies row index i (0 = master) by tag, given how many
+// stable releases have been seen so far, returning the display status/class
+// and the updated stableReleasesSeen counter.
+func supportTier(i int, tag string, stableReleasesSeen int) (status, class string, newStableReleasesSeen int) {
+	isRC := strings.Contains(strings.ToLower(tag), "rc")
+	if i > 0 && !isRC {
+		stableReleasesSeen++
+		switch stableReleasesSeen {
+		case 1:
+			return "Supported", "diff-add", stableReleasesSeen
+		case 2:
+			return "Best-effort", "text-muted", stableReleasesSeen
+		}
+	}
+	// master (i == 0), rc releases, and stable releases beyond the latest two fall through to Unsupported.
+	return "Unsupported", "diff-del", stableReleasesSeen
 }

@@ -83,16 +83,20 @@ func collectFlakyTestRows(ctx context.Context, client *github.Client) []flakyTes
 		rows = append(rows, *row)
 	}
 
-	sort.Slice(rows, func(i, j int) bool {
-		rateI := float64(rows[i].FailCount) / float64(rows[i].SampledRuns)
-		rateJ := float64(rows[j].FailCount) / float64(rows[j].SampledRuns)
-		if rateI != rateJ {
-			return rateI > rateJ
-		}
-		return rows[i].FailCount > rows[j].FailCount
-	})
+	sort.Slice(rows, func(i, j int) bool { return flakyLess(rows[i], rows[j]) })
 
 	return rows
+}
+
+// flakyLess reports whether a should sort before b: higher flake rate first,
+// then higher raw fail count as a tiebreaker.
+func flakyLess(a, b flakyTestRow) bool {
+	rateA := float64(a.FailCount) / float64(a.SampledRuns)
+	rateB := float64(b.FailCount) / float64(b.SampledRuns)
+	if rateA != rateB {
+		return rateA > rateB
+	}
+	return a.FailCount > b.FailCount
 }
 
 // findRecentMasterRuns pages through completed "Testing" workflow runs on
@@ -107,7 +111,7 @@ func findRecentMasterRuns(ctx context.Context, client *github.Client, n int) []m
 		ListOptions: github.ListOptions{PerPage: perPageMax},
 	}
 	for len(runs) < n {
-		result, resp, err := client.Actions.ListWorkflowRunsByFileName(ctx, "argoproj", "argo-rollouts", testingWorkflowFile, opts)
+		result, resp, err := client.Actions.ListWorkflowRunsByFileName(ctx, owner, repo, testingWorkflowFile, opts)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "error listing %s runs: %v\n", testingWorkflowFile, err)
 			break

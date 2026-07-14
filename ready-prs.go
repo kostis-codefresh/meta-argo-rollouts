@@ -78,7 +78,7 @@ func listAllOpenPRs(ctx context.Context, client *github.Client) []*github.PullRe
 		ListOptions: github.ListOptions{PerPage: perPageMax},
 	}
 	for {
-		prs, resp, err := client.PullRequests.List(ctx, "argoproj", "argo-rollouts", opts)
+		prs, resp, err := client.PullRequests.List(ctx, owner, repo, opts)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "error listing open PRs: %v\n", err)
 			os.Exit(1)
@@ -100,7 +100,7 @@ func listAllOpenPRs(ctx context.Context, client *github.Client) []*github.PullRe
 func checkReadyToMerge(ctx context.Context, client *github.Client, pr *github.PullRequest) (*github.PullRequest, bool) {
 	number := pr.GetNumber()
 
-	full, _, err := client.PullRequests.Get(ctx, "argoproj", "argo-rollouts", number)
+	full, _, err := client.PullRequests.Get(ctx, owner, repo, number)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error fetching PR #%d: %v\n", number, err)
 		return nil, false
@@ -113,7 +113,7 @@ func checkReadyToMerge(ctx context.Context, client *github.Client, pr *github.Pu
 		return nil, false
 	}
 
-	checks, _, err := client.Checks.ListCheckRunsForRef(ctx, "argoproj", "argo-rollouts", pr.GetHead().GetSHA(), &github.ListCheckRunsOptions{ListOptions: github.ListOptions{PerPage: perPageMax}})
+	checks, _, err := client.Checks.ListCheckRunsForRef(ctx, owner, repo, pr.GetHead().GetSHA(), &github.ListCheckRunsOptions{ListOptions: github.ListOptions{PerPage: perPageMax}})
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error fetching check runs for PR #%d: %v\n", number, err)
 		return nil, false
@@ -130,7 +130,7 @@ func checkReadyToMerge(ctx context.Context, client *github.Client, pr *github.Pu
 // by anyone hides the PR permanently, regardless of any other outstanding
 // review requests.
 func needsReview(ctx context.Context, client *github.Client, number int) bool {
-	reviews, _, err := client.PullRequests.ListReviews(ctx, "argoproj", "argo-rollouts", number, &github.ListOptions{PerPage: perPageMax})
+	reviews, _, err := client.PullRequests.ListReviews(ctx, owner, repo, number, &github.ListOptions{PerPage: perPageMax})
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error fetching reviews for PR #%d: %v\n", number, err)
 		return false
@@ -152,7 +152,7 @@ func needsReview(ctx context.Context, client *github.Client, number int) bool {
 		return true
 	}
 
-	reviewers, _, err := client.PullRequests.ListReviewers(ctx, "argoproj", "argo-rollouts", number, &github.ListOptions{PerPage: perPageMax})
+	reviewers, _, err := client.PullRequests.ListReviewers(ctx, owner, repo, number, &github.ListOptions{PerPage: perPageMax})
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error fetching requested reviewers for PR #%d: %v\n", number, err)
 		return false

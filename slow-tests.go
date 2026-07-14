@@ -70,7 +70,7 @@ func findLatestMasterRunID(ctx context.Context, client *github.Client) (int64, b
 		Status:      "success",
 		ListOptions: github.ListOptions{PerPage: 1},
 	}
-	runs, _, err := client.Actions.ListWorkflowRunsByFileName(ctx, "argoproj", "argo-rollouts", testingWorkflowFile, opts)
+	runs, _, err := client.Actions.ListWorkflowRunsByFileName(ctx, owner, repo, testingWorkflowFile, opts)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error listing %s runs: %v\n", testingWorkflowFile, err)
 		return 0, false
@@ -88,7 +88,7 @@ func findLatestMasterRunID(ctx context.Context, client *github.Client) (int64, b
 func findLatestMatrixJobID(ctx context.Context, client *github.Client, runID int64) (int64, bool) {
 	opts := &github.ListWorkflowJobsOptions{ListOptions: github.ListOptions{PerPage: perPageMax}}
 	for {
-		jobs, resp, err := client.Actions.ListWorkflowJobs(ctx, "argoproj", "argo-rollouts", runID, opts)
+		jobs, resp, err := client.Actions.ListWorkflowJobs(ctx, owner, repo, runID, opts)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "error listing jobs for run %d: %v\n", runID, err)
 			return 0, false
@@ -113,7 +113,7 @@ func findLatestMatrixJobID(ctx context.Context, client *github.Client, runID int
 // than the authenticated one, since the redirect target is a pre-signed storage URL
 // that shouldn't get an Authorization header attached.
 func downloadJobLog(ctx context.Context, client *github.Client, jobID int64) (string, error) {
-	logURL, _, err := client.Actions.GetWorkflowJobLogs(ctx, "argoproj", "argo-rollouts", jobID, 10)
+	logURL, _, err := client.Actions.GetWorkflowJobLogs(ctx, owner, repo, jobID, 10)
 	if err != nil {
 		return "", fmt.Errorf("resolving log URL: %w", err)
 	}

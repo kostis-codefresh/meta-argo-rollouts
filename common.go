@@ -6,6 +6,10 @@ import (
 	"os"
 )
 
+// owner and repo identify the GitHub repository this program reports on.
+const owner = "argoproj"
+const repo = "argo-rollouts"
+
 // copyStaticAssets creates docs/img and copies the dashboard's shared CSS,
 // favicon, and images from web/ into docs/, overwriting existing copies.
 func copyStaticAssets() error {

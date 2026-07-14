@@ -105,3 +105,66 @@ func TestNeedsReview(t *testing.T) {
 		})
 	}
 }
+
+func TestAllChecksPassed(t *testing.T) {
+	tests := []struct {
+		name   string
+		checks *github.ListCheckRunsResults
+		want   bool
+	}{
+		{
+			name:   "no check runs",
+			checks: &github.ListCheckRunsResults{CheckRuns: nil},
+			want:   false,
+		},
+		{
+			name: "all success",
+			checks: &github.ListCheckRunsResults{CheckRuns: []*github.CheckRun{
+				{Status: new("completed"), Conclusion: new("success")},
+				{Status: new("completed"), Conclusion: new("skipped")},
+			}},
+			want: true,
+		},
+		{
+			name: "one still pending",
+			checks: &github.ListCheckRunsResults{CheckRuns: []*github.CheckRun{
+				{Status: new("completed"), Conclusion: new("success")},
+				{Status: new("in_progress")},
+			}},
+			want: false,
+		},
+		{
+			name: "one failed",
+			checks: &github.ListCheckRunsResults{CheckRuns: []*github.CheckRun{
+				{Status: new("completed"), Conclusion: new("success")},
+				{Status: new("completed"), Conclusion: new("failure")},
+			}},
+			want: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := allChecksPassed(tt.checks); got != tt.want {
+				t.Errorf("allChecksPassed() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestExcludeCritical(t *testing.T) {
+	ready := []readyPRRow{{Number: 1}, {Number: 2}, {Number: 3}}
+	critical := []criticalPRRow{{Number: 2}}
+
+	got := excludeCritical(ready, critical)
+
+	want := []int{1, 3}
+	if len(got) != len(want) {
+		t.Fatalf("excludeCritical() returned %d rows, want %d", len(got), len(want))
+	}
+	for i, n := range want {
+		if got[i].Number != n {
+			t.Errorf("excludeCritical()[%d].Number = %d, want %d", i, got[i].Number, n)
+		}
+	}
+}

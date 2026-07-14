@@ -33,7 +33,8 @@ func main() {
 	}
 	client := github.NewClient(httpClient)
 
-	ctx := context.Background()
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Minute)
+	defer cancel()
 
 	generatedAt := time.Now()
 	if err := copyStaticAssets(); err != nil {

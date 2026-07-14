@@ -41,7 +41,7 @@ func isDocOnly(ctx context.Context, client *github.Client, number int) bool {
 	opts := &github.ListOptions{PerPage: perPageMax}
 	sawFile := false
 	for {
-		files, resp, err := client.PullRequests.ListFiles(ctx, "argoproj", "argo-rollouts", number, opts)
+		files, resp, err := client.PullRequests.ListFiles(ctx, owner, repo, number, opts)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "error fetching files for PR #%d: %v\n", number, err)
 			return false

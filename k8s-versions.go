@@ -69,7 +69,7 @@ func collectReleaseRows(ctx context.Context, client *github.Client) []releaseRow
 	}}
 
 	opts := &github.ListOptions{PerPage: releaseCount}
-	releases, _, err := client.Repositories.ListReleases(ctx, "argoproj", "argo-rollouts", opts)
+	releases, _, err := client.Repositories.ListReleases(ctx, owner, repo, opts)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error fetching releases: %v\n", err)
 		os.Exit(1)
@@ -109,7 +109,7 @@ func collectReleaseRows(ctx context.Context, client *github.Client) []releaseRow
 
 // fetchMasterCommitDate returns the committer date of master's tip commit.
 func fetchMasterCommitDate(ctx context.Context, client *github.Client) time.Time {
-	commit, _, err := client.Repositories.GetCommit(ctx, "argoproj", "argo-rollouts", "master", nil)
+	commit, _, err := client.Repositories.GetCommit(ctx, owner, repo, "master", nil)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error fetching master commit date: %v\n", err)
 		return time.Time{}
@@ -140,7 +140,7 @@ type k8sVersionsResult struct {
 // at the given ref, trying testing.yaml first and falling back to the older e2e.yaml.
 func fetchK8sVersions(ctx context.Context, client *github.Client, ref string) k8sVersionsResult {
 	for _, path := range workflowFiles {
-		content, _, resp, err := client.Repositories.GetContents(ctx, "argoproj", "argo-rollouts", path, &github.RepositoryContentGetOptions{Ref: ref})
+		content, _, resp, err := client.Repositories.GetContents(ctx, owner, repo, path, &github.RepositoryContentGetOptions{Ref: ref})
 		if err != nil {
 			if resp == nil || resp.StatusCode != http.StatusNotFound {
 				fmt.Fprintf(os.Stderr, "error fetching %s at %s: %v\n", path, ref, err)
