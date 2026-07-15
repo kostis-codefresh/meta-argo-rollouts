@@ -13,10 +13,8 @@ import (
 
 // newTestClient returns a github.Client pointed at a test server that serves
 // reviewsJSON for GET .../reviews and reviewersJSON for GET
-// .../requested_reviewers, for the given PR number. teamMembersJSON maps a
-// team slug to the JSON array served for GET .../teams/{slug}/members; it
-// may be nil if the test doesn't exercise team-based re-requests.
-func newTestClient(t *testing.T, number int, reviewsJSON, reviewersJSON string, teamMembersJSON map[string]string) *github.Client {
+// .../requested_reviewers, for the given PR number.
+func newTestClient(t *testing.T, number int, reviewsJSON, reviewersJSON string) *github.Client {
 	t.Helper()
 
 	mux := http.NewServeMux()
@@ -26,11 +24,6 @@ func newTestClient(t *testing.T, number int, reviewsJSON, reviewersJSON string, 
 	mux.HandleFunc(fmt.Sprintf("/repos/argoproj/argo-rollouts/pulls/%d/requested_reviewers", number), func(w http.ResponseWriter, r *http.Request) {
 		_, _ = fmt.Fprint(w, reviewersJSON)
 	})
-	for slug, membersJSON := range teamMembersJSON {
-		mux.HandleFunc(fmt.Sprintf("/orgs/argoproj/teams/%s/members", slug), func(w http.ResponseWriter, r *http.Request) {
-			_, _ = fmt.Fprint(w, membersJSON)
-		})
-	}
 
 	server := httptest.NewServer(mux)
 	t.Cleanup(server.Close)
@@ -46,12 +39,11 @@ func newTestClient(t *testing.T, number int, reviewsJSON, reviewersJSON string, 
 
 func TestNeedsReview(t *testing.T) {
 	tests := []struct {
-		name            string
-		number          int
-		reviewsJSON     string
-		reviewersJSON   string
-		teamMembersJSON map[string]string
-		want            bool
+		name          string
+		number        int
+		reviewsJSON   string
+		reviewersJSON string
+		want          bool
 	}{
 		{
 			// Two reviewers requested changes, but the only reviewer currently
@@ -123,72 +115,16 @@ func TestNeedsReview(t *testing.T) {
 			reviewersJSON: `{"users": [], "teams": []}`,
 			want:          true,
 		},
-		{
-			// The reviewer who requested changes was re-requested via a team
-			// they belong to, rather than by name.
-			name:   "changes requested, reviewer re-requested via a team",
-			number: 8,
-			reviewsJSON: `[
-				{"user": {"login": "alice"}, "state": "CHANGES_REQUESTED", "author_association": "COLLABORATOR"}
-			]`,
-			reviewersJSON:   `{"users": [], "teams": [{"slug": "approvers"}]}`,
-			teamMembersJSON: map[string]string{"approvers": `[{"login": "alice"}]`},
-			want:            true,
-		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := newTestClient(t, tt.number, tt.reviewsJSON, tt.reviewersJSON, tt.teamMembersJSON)
-			got := needsReview(context.Background(), client, tt.number, map[string][]string{})
+			client := newTestClient(t, tt.number, tt.reviewsJSON, tt.reviewersJSON)
+			got := needsReview(context.Background(), client, tt.number)
 			if got != tt.want {
 				t.Errorf("needsReview() = %v, want %v", got, tt.want)
 			}
 		})
-	}
-}
-
-// TestNeedsReviewCachesTeamMembers checks that resolving a requested team's
-// members is done at most once per team per run, not once per PR, since the
-// same handful of teams (e.g. argo-rollouts-approvers) get requested across
-// many PRs.
-func TestNeedsReviewCachesTeamMembers(t *testing.T) {
-	teamMembersRequests := 0
-
-	mux := http.NewServeMux()
-	for _, number := range []int{10, 11} {
-		number := number
-		mux.HandleFunc(fmt.Sprintf("/repos/argoproj/argo-rollouts/pulls/%d/reviews", number), func(w http.ResponseWriter, r *http.Request) {
-			_, _ = fmt.Fprint(w, `[{"user": {"login": "alice"}, "state": "CHANGES_REQUESTED", "author_association": "COLLABORATOR"}]`)
-		})
-		mux.HandleFunc(fmt.Sprintf("/repos/argoproj/argo-rollouts/pulls/%d/requested_reviewers", number), func(w http.ResponseWriter, r *http.Request) {
-			_, _ = fmt.Fprint(w, `{"users": [], "teams": [{"slug": "approvers"}]}`)
-		})
-	}
-	mux.HandleFunc("/orgs/argoproj/teams/approvers/members", func(w http.ResponseWriter, r *http.Request) {
-		teamMembersRequests++
-		_, _ = fmt.Fprint(w, `[{"login": "alice"}]`)
-	})
-
-	server := httptest.NewServer(mux)
-	t.Cleanup(server.Close)
-
-	client := github.NewClient(nil)
-	baseURL, err := url.Parse(server.URL + "/")
-	if err != nil {
-		t.Fatalf("parsing test server URL: %v", err)
-	}
-	client.BaseURL = baseURL
-
-	cache := map[string][]string{}
-	for _, number := range []int{10, 11} {
-		if !needsReview(context.Background(), client, number, cache) {
-			t.Errorf("needsReview(%d) = false, want true", number)
-		}
-	}
-
-	if teamMembersRequests != 1 {
-		t.Errorf("team members endpoint hit %d times across 2 PRs sharing the same team, want 1", teamMembersRequests)
 	}
 }
 

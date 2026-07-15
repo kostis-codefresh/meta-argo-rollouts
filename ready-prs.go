@@ -38,10 +38,9 @@ func collectReadyPRRows(ctx context.Context, client *github.Client) []readyPRRow
 	prs := listAllOpenPRs(ctx, client)
 	fmt.Printf("Found %d total PRs\n", len(prs))
 
-	teamMembersCache := map[string][]string{}
 	var rows []readyPRRow
 	for _, pr := range prs {
-		full, ready := checkReadyToMerge(ctx, client, pr, teamMembersCache)
+		full, ready := checkReadyToMerge(ctx, client, pr)
 		if !ready {
 			continue
 		}
@@ -100,14 +99,11 @@ func listAllOpenPRs(ctx context.Context, client *github.Client) []*github.PullRe
 }
 
 // checkReadyToMerge applies the filter, making up to 4 calls per PR (Get,
-// ListReviews, ListReviewers, ListCheckRunsForRef), plus one extra call the
-// first time a given team is seen as a currently-requested reviewer (cached
-// in teamMembersCache thereafter, since the same handful of teams are
-// requested across many PRs). It returns the fetched PR (with fields like
-// Additions/Deletions only present on the single-PR Get response) alongside
-// whether it passed. Any error is treated as "not ready" rather than fatal,
-// so one flaky PR lookup doesn't abort the whole run.
-func checkReadyToMerge(ctx context.Context, client *github.Client, pr *github.PullRequest, teamMembersCache map[string][]string) (*github.PullRequest, bool) {
+// ListReviews, ListReviewers, ListCheckRunsForRef). It returns the fetched PR
+// (with fields like Additions/Deletions only present on the single-PR Get
+// response) alongside whether it passed. Any error is treated as "not ready"
+// rather than fatal, so one flaky PR lookup doesn't abort the whole run.
+func checkReadyToMerge(ctx context.Context, client *github.Client, pr *github.PullRequest) (*github.PullRequest, bool) {
 	number := pr.GetNumber()
 
 	full, _, err := client.PullRequests.Get(ctx, owner, repo, number)
@@ -119,7 +115,7 @@ func checkReadyToMerge(ctx context.Context, client *github.Client, pr *github.Pu
 		return nil, false
 	}
 
-	if !needsReview(ctx, client, number, teamMembersCache) {
+	if !needsReview(ctx, client, number) {
 		return nil, false
 	}
 
@@ -136,12 +132,11 @@ func checkReadyToMerge(ctx context.Context, client *github.Client, pr *github.Pu
 
 // needsReview reports whether the PR still needs a human verdict: no
 // reviews yet, only comments so far, or changes were requested and the
-// same reviewer who requested them has since been re-requested (as
-// themselves or via a team they belong to). Only reviews from someone with
-// write access to the repo count towards an approval or a changes-requested
-// verdict; a review from an outside contributor (no merge authority) is
-// ignored either way.
-func needsReview(ctx context.Context, client *github.Client, number int, teamMembersCache map[string][]string) bool {
+// same reviewer who requested them has since been re-requested. Only
+// reviews from someone with write access to the repo count towards an
+// approval or a changes-requested verdict; a review from an outside
+// contributor (no merge authority) is ignored either way.
+func needsReview(ctx context.Context, client *github.Client, number int) bool {
 	reviews, _, err := client.PullRequests.ListReviews(ctx, owner, repo, number, &github.ListOptions{PerPage: perPageMax})
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error fetching reviews for PR #%d: %v\n", number, err)
@@ -174,37 +169,6 @@ func needsReview(ctx context.Context, client *github.Client, number int, teamMem
 	}
 	for _, user := range reviewers.Users {
 		if changesRequestedBy[user.GetLogin()] {
-			return true
-		}
-	}
-	for _, team := range reviewers.Teams {
-		if teamHasAnyMember(ctx, client, team.GetSlug(), changesRequestedBy, teamMembersCache) {
-			return true
-		}
-	}
-	return false
-}
-
-// teamHasAnyMember reports whether any of the given usernames belongs to the
-// named org team, so a re-request routed through a team (rather than the
-// individual) is still recognized as re-requesting that reviewer. Team
-// membership is fetched once per slug per run and kept in cache, since the
-// same handful of teams get requested across many PRs.
-func teamHasAnyMember(ctx context.Context, client *github.Client, teamSlug string, logins map[string]bool, cache map[string][]string) bool {
-	members, ok := cache[teamSlug]
-	if !ok {
-		fetched, _, err := client.Teams.ListTeamMembersBySlug(ctx, owner, teamSlug, &github.TeamListTeamMembersOptions{ListOptions: github.ListOptions{PerPage: perPageMax}})
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "error fetching members of team %s: %v\n", teamSlug, err)
-			return false
-		}
-		for _, member := range fetched {
-			members = append(members, member.GetLogin())
-		}
-		cache[teamSlug] = members
-	}
-	for _, login := range members {
-		if logins[login] {
 			return true
 		}
 	}
