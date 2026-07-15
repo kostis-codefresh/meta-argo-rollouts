@@ -114,7 +114,7 @@ func checkReadyToMerge(ctx context.Context, client *github.Client, pr *github.Pu
 		fmt.Fprintf(os.Stderr, "error fetching PR #%d: %v\n", number, err)
 		return nil, false
 	}
-	if full.GetMergeableState() == "dirty" {
+	if full.Mergeable != nil && !*full.Mergeable {
 		return nil, false
 	}
 
