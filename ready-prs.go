@@ -111,7 +111,10 @@ func checkReadyToMerge(ctx context.Context, client *github.Client, pr *github.Pu
 		fmt.Fprintf(os.Stderr, "error fetching PR #%d: %v\n", number, err)
 		return nil, false
 	}
-	if full.Mergeable != nil && !*full.Mergeable {
+	// GitHub computes Mergeable asynchronously; a nil value means it hasn't
+	// finished yet (still "unknown"), not that the PR is conflict-free, so
+	// treat that the same as a real conflict rather than letting it through.
+	if full.Mergeable == nil || !*full.Mergeable {
 		return nil, false
 	}
 
