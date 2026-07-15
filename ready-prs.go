@@ -11,10 +11,10 @@ import (
 
 const perPageMax = 100
 
-// readyPRRow is one open PR with no merge conflicts, all checks passing, and
-// no approval yet (a PR with changes requested is excluded too, unless the
-// author has since re-requested review from the same reviewer who requested
-// changes).
+// readyPRRow is one open PR with no merge conflicts, no failing checks
+// (checks still in progress don't block it), and no approval yet (a PR with
+// changes requested is excluded too, unless the author has since
+// re-requested review from the same reviewer who requested changes).
 type readyPRRow struct {
 	Number    int
 	Title     string
@@ -26,10 +26,11 @@ type readyPRRow struct {
 }
 
 // collectReadyPRRows fetches all open PRs and keeps only those with no merge
-// conflicts, all checks passing, and no approval yet (a PR with changes
-// requested is excluded too, unless the author has since re-requested review
-// from the same reviewer who requested changes). Always live — no on-disk
-// cache, since this state is transient (unlike immutable releases).
+// conflicts, no failing checks (checks still in progress don't block it),
+// and no approval yet (a PR with changes requested is excluded too, unless
+// the author has since re-requested review from the same reviewer who
+// requested changes). Always live — no on-disk cache, since this state is
+// transient (unlike immutable releases).
 func collectReadyPRRows(ctx context.Context, client *github.Client) []readyPRRow {
 	start := time.Now()
 	fmt.Println("Starting to collect ready PRs")
@@ -224,15 +225,16 @@ func hasWriteAccess(review *github.PullRequestReview) bool {
 	}
 }
 
-// allChecksPassed reports whether check runs exist for the ref and every one
-// has completed with a passing conclusion (success or skipped).
+// allChecksPassed reports whether check runs exist for the ref and none of
+// them has failed. A check run that is still queued or in progress does not
+// block readiness — only a completed run with a non-passing conclusion does.
 func allChecksPassed(checks *github.ListCheckRunsResults) bool {
 	if len(checks.CheckRuns) == 0 {
 		return false
 	}
 	for _, run := range checks.CheckRuns {
 		if run.GetStatus() != "completed" {
-			return false
+			continue
 		}
 		switch run.GetConclusion() {
 		case "success", "skipped":

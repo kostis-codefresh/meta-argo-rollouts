@@ -217,7 +217,7 @@ func TestAllChecksPassed(t *testing.T) {
 				{Status: new("completed"), Conclusion: new("success")},
 				{Status: new("in_progress")},
 			}},
-			want: false,
+			want: true,
 		},
 		{
 			name: "one failed",
