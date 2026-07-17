@@ -352,5 +352,17 @@
     ],
     "workflow_path": ".github/workflows/testing.yaml",
     "workflow_line": 77
+  },
+  "v1.9.1": {
+    "name": "v1.9.1",
+    "published_at": "2026-07-17T10:33:29Z",
+    "k8s_versions": [
+      "1.32",
+      "1.33",
+      "1.34",
+      "1.35"
+    ],
+    "workflow_path": ".github/workflows/testing.yaml",
+    "workflow_line": 77
   }
 }
