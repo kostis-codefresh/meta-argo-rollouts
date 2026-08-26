@@ -18,7 +18,7 @@
                 <img src="img/menu.svg" alt="Menu" class="hamburger-icon">
             </label>
             <span class="fw-medium me-3 gcp-brand">Argo Rollouts Meta</span>
-            <span class="text-muted small">26 Aug 2026 06:37 UTC</span>
+            <span class="text-muted small">26 Aug 2026 12:39 UTC</span>
         </div>
         <div>
              <a href="https://github.com/kostis-codefresh/meta-argo-rollouts"><img src="img/rollouts.png" alt="Argo Rollouts" class="navbar-logo"></a>
@@ -77,49 +77,73 @@
                                 <tr>
                                     <td>TestCanaryWithPausedRollout</td>
                                     <td>TestCanarySuite</td>
-                                    <td><span class="">102.0s</span></td>
+                                    <td><span class="">102.2s</span></td>
                                 </tr>
                                 
                                 <tr>
                                     <td>TestBlueGreenProgressDeadlineExceededWithPause</td>
                                     <td>TestBlueGreenSuite</td>
-                                    <td><span class="">65.4s</span></td>
+                                    <td><span class="">65.2s</span></td>
                                 </tr>
                                 
                                 <tr>
                                     <td>TestBlueGreenProgressDeadlineExceededWithoutPause</td>
                                     <td>TestBlueGreenSuite</td>
-                                    <td><span class="">64.8s</span></td>
+                                    <td><span class="">65.0s</span></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>TestScaleDownOnSuccess</td>
+                                    <td>TestFunctionalSuite</td>
+                                    <td><span class="diff-del">62.4s</span></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>TestScaleDownOnSuccess</td>
+                                    <td>TestFunctionalSuite</td>
+                                    <td><span class="diff-del">62.4s</span></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>TestScaleDownOnSuccess</td>
+                                    <td>TestFunctionalSuite</td>
+                                    <td><span class="diff-del">62.1s</span></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>TestScaleDownOnSuccess</td>
+                                    <td>TestFunctionalSuite</td>
+                                    <td><span class="diff-del">62.1s</span></td>
                                 </tr>
                                 
                                 <tr>
                                     <td>TestAPISIXCanarySetHeaderStep</td>
                                     <td>TestAPISIXSuite</td>
-                                    <td><span class="">51.2s</span></td>
+                                    <td><span class="">50.4s</span></td>
                                 </tr>
                                 
                                 <tr>
                                     <td>TestBlueGreenKitchenSink</td>
                                     <td>TestAnalysisSuite</td>
-                                    <td><span class="">49.9s</span></td>
+                                    <td><span class="">49.6s</span></td>
                                 </tr>
                                 
                                 <tr>
                                     <td>TestCanaryInlineAnalysisLongRunningJobWithDeadline</td>
                                     <td>TestAnalysisSuite</td>
-                                    <td><span class="">47.9s</span></td>
-                                </tr>
-                                
-                                <tr>
-                                    <td>TestRolloutPDBRestart</td>
-                                    <td>TestFunctionalSuite</td>
-                                    <td><span class="">46.0s</span></td>
+                                    <td><span class="">47.0s</span></td>
                                 </tr>
                                 
                                 <tr>
                                     <td>TestCanaryBackgroundAnalysisLongRunningJobWithDeadline</td>
                                     <td>TestAnalysisSuite</td>
-                                    <td><span class="">45.9s</span></td>
+                                    <td><span class="">46.7s</span></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>TestRolloutPDBRestart</td>
+                                    <td>TestFunctionalSuite</td>
+                                    <td><span class="">44.7s</span></td>
                                 </tr>
                                 
                                 <tr>
@@ -129,27 +153,21 @@
                                 </tr>
                                 
                                 <tr>
-                                    <td>TestExperimentWithDryRunMetrics</td>
-                                    <td>TestExperimentSuite</td>
-                                    <td><span class="">34.4s</span></td>
+                                    <td>TestRolloutPauseDurationGreaterThanProgressDeadlineSeconds</td>
+                                    <td>TestFunctionalSuite</td>
+                                    <td><span class="">34.7s</span></td>
                                 </tr>
                                 
                                 <tr>
                                     <td>TestExperimentWithMeasurementRetentionMetrics</td>
                                     <td>TestExperimentSuite</td>
-                                    <td><span class="">34.1s</span></td>
+                                    <td><span class="">34.0s</span></td>
                                 </tr>
                                 
                                 <tr>
-                                    <td>TestRolloutPauseDurationGreaterThanProgressDeadlineSeconds</td>
-                                    <td>TestFunctionalSuite</td>
-                                    <td><span class="">33.6s</span></td>
-                                </tr>
-                                
-                                <tr>
-                                    <td>TestRollbackAnalysisOutsideWindow</td>
-                                    <td>TestRollbackSuite</td>
-                                    <td><span class="">32.3s</span></td>
+                                    <td>TestExperimentWithDryRunMetrics</td>
+                                    <td>TestExperimentSuite</td>
+                                    <td><span class="">33.9s</span></td>
                                 </tr>
                                 
                                 <tr>
@@ -159,27 +177,39 @@
                                 </tr>
                                 
                                 <tr>
-                                    <td>TestReduceWeightAndHonorMaxUnavailable</td>
-                                    <td>TestCanarySuite</td>
-                                    <td><span class="">27.7s</span></td>
+                                    <td>TestRollbackAnalysisOutsideWindow</td>
+                                    <td>TestRollbackSuite</td>
+                                    <td><span class="">31.9s</span></td>
                                 </tr>
                                 
                                 <tr>
                                     <td>TestKubectlWaitForCompleted</td>
                                     <td>TestFunctionalSuite</td>
-                                    <td><span class="">26.7s</span></td>
+                                    <td><span class="">27.6s</span></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>TestReduceWeightAndHonorMaxUnavailable</td>
+                                    <td>TestCanarySuite</td>
+                                    <td><span class="">27.1s</span></td>
                                 </tr>
                                 
                                 <tr>
                                     <td>TestBlueGreenAnalysis</td>
                                     <td>TestAnalysisSuite</td>
-                                    <td><span class="">26.3s</span></td>
+                                    <td><span class="diff-del">25.6s</span></td>
                                 </tr>
                                 
                                 <tr>
-                                    <td>TestCanaryDynamicStableScaleAbortScaleDownDelay</td>
-                                    <td>TestCanarySuite</td>
-                                    <td><span class="">25.2s</span></td>
+                                    <td>TestBlueGreenAnalysis</td>
+                                    <td>TestAnalysisSuite</td>
+                                    <td><span class="diff-del">25.6s</span></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>TestBlueGreenAnalysis</td>
+                                    <td>TestAnalysisSuite</td>
+                                    <td><span class="">25.4s</span></td>
                                 </tr>
                                 
                                 <tr>
@@ -189,33 +219,45 @@
                                 </tr>
                                 
                                 <tr>
-                                    <td>TestScaleDownProgressivelyCompletedCanary</td>
-                                    <td>TestFunctionalSuite</td>
-                                    <td><span class="">23.5s</span></td>
-                                </tr>
-                                
-                                <tr>
-                                    <td>TestBlueGreenPrePromotionFail</td>
-                                    <td>TestAnalysisSuite</td>
-                                    <td><span class="">22.3s</span></td>
-                                </tr>
-                                
-                                <tr>
-                                    <td>TestRolloutBadToBadUpdate</td>
-                                    <td>TestFunctionalSuite</td>
-                                    <td><span class="">22.0s</span></td>
+                                    <td>TestCanaryDynamicStableScaleAbortScaleDownDelay</td>
+                                    <td>TestCanarySuite</td>
+                                    <td><span class="">23.6s</span></td>
                                 </tr>
                                 
                                 <tr>
                                     <td>TestRollbackAnalysisWithinWindow</td>
                                     <td>TestRollbackSuite</td>
-                                    <td><span class="">22.0s</span></td>
+                                    <td><span class="">22.2s</span></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>TestRolloutBadToBadUpdate</td>
+                                    <td>TestFunctionalSuite</td>
+                                    <td><span class="">22.1s</span></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>TestBlueGreenPrePromotionFail</td>
+                                    <td>TestAnalysisSuite</td>
+                                    <td><span class="">22.1s</span></td>
                                 </tr>
                                 
                                 <tr>
                                     <td>TestAPISIXCanaryStep</td>
                                     <td>TestAPISIXSuite</td>
-                                    <td><span class="">21.8s</span></td>
+                                    <td><span class="">21.9s</span></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>TestScaleDownProgressivelyCompletedCanary</td>
+                                    <td>TestFunctionalSuite</td>
+                                    <td><span class="">21.6s</span></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>TestCompleteRolloutRestart</td>
+                                    <td>TestFunctionalSuite</td>
+                                    <td><span class="">21.1s</span></td>
                                 </tr>
                                 
                                 <tr>
@@ -225,21 +267,15 @@
                                 </tr>
                                 
                                 <tr>
-                                    <td>TestCompleteRolloutRestart</td>
-                                    <td>TestFunctionalSuite</td>
-                                    <td><span class="">20.2s</span></td>
+                                    <td>TestAnalysisWithArgs</td>
+                                    <td>TestAnalysisSuite</td>
+                                    <td><span class="">20.5s</span></td>
                                 </tr>
                                 
                                 <tr>
                                     <td>TestRolloutBadToGoodSetWeightUpdate</td>
                                     <td>TestFunctionalSuite</td>
                                     <td><span class="">20.1s</span></td>
-                                </tr>
-                                
-                                <tr>
-                                    <td>TestAnalysisWithArgs</td>
-                                    <td>TestAnalysisSuite</td>
-                                    <td><span class="">19.3s</span></td>
                                 </tr>
                                 
                                 <tr>
@@ -251,19 +287,25 @@
                                 <tr>
                                     <td>TestCanaryDynamicStableScale</td>
                                     <td>TestCanarySuite</td>
-                                    <td><span class="">17.3s</span></td>
+                                    <td><span class="">18.2s</span></td>
                                 </tr>
                                 
                                 <tr>
-                                    <td>TestCanaryInlineMultipleAnalysis</td>
-                                    <td>TestAnalysisSuite</td>
-                                    <td><span class="">16.3s</span></td>
+                                    <td>TestExperimentWithMultiportServiceAndScaleDownDelay</td>
+                                    <td>TestExperimentSuite</td>
+                                    <td><span class="">17.1s</span></td>
                                 </tr>
                                 
                                 <tr>
-                                    <td>TestRolloutBadToGoodUpdate</td>
-                                    <td>TestFunctionalSuite</td>
-                                    <td><span class="">16.3s</span></td>
+                                    <td>TestExperimentWithServiceAndScaleDownDelay</td>
+                                    <td>TestExperimentSuite</td>
+                                    <td><span class="">17.0s</span></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>TestExperimentWithServiceNameAndScaleDownDelay</td>
+                                    <td>TestExperimentSuite</td>
+                                    <td><span class="">17.0s</span></td>
                                 </tr>
                                 
                                 <tr>
@@ -273,123 +315,93 @@
                                 </tr>
                                 
                                 <tr>
-                                    <td>TestExperimentWithServiceAndScaleDownDelay</td>
-                                    <td>TestExperimentSuite</td>
+                                    <td>TestScaleDownProgressivelyCompleted</td>
+                                    <td>TestFunctionalSuite</td>
                                     <td><span class="">16.1s</span></td>
                                 </tr>
                                 
                                 <tr>
-                                    <td>TestBlueGreenDuration_RollbackOutsideWindow</td>
-                                    <td>TestDurationSuite</td>
-                                    <td><span class="diff-del">16.0s</span></td>
-                                </tr>
-                                
-                                <tr>
-                                    <td>TestBlueGreenDuration_RollbackOutsideWindow</td>
-                                    <td>TestDurationSuite</td>
-                                    <td><span class="diff-del">16.0s</span></td>
-                                </tr>
-                                
-                                <tr>
-                                    <td>TestExperimentWithServiceNameAndScaleDownDelay</td>
-                                    <td>TestExperimentSuite</td>
-                                    <td><span class="">16.0s</span></td>
-                                </tr>
-                                
-                                <tr>
-                                    <td>TestExperimentWithMultiportServiceAndScaleDownDelay</td>
-                                    <td>TestExperimentSuite</td>
-                                    <td><span class="">15.9s</span></td>
-                                </tr>
-                                
-                                <tr>
-                                    <td>TestBlueGreenAbortAndUpdate</td>
+                                    <td>TestCanaryInlineMultipleAnalysis</td>
                                     <td>TestAnalysisSuite</td>
-                                    <td><span class="">15.8s</span></td>
-                                </tr>
-                                
-                                <tr>
-                                    <td>TestALBExperimentStepNoSetWeightMultiIngress</td>
-                                    <td>TestAWSSuite</td>
-                                    <td><span class="">15.7s</span></td>
+                                    <td><span class="">16.1s</span></td>
                                 </tr>
                                 
                                 <tr>
                                     <td>TestALBExperimentStepNoSetWeight</td>
                                     <td>TestAWSSuite</td>
-                                    <td><span class="">15.2s</span></td>
+                                    <td><span class="">16.0s</span></td>
                                 </tr>
                                 
                                 <tr>
-                                    <td>TestScaleDownProgressivelyCompleted</td>
+                                    <td>TestALBExperimentStepNoSetWeightMultiIngress</td>
+                                    <td>TestAWSSuite</td>
+                                    <td><span class="">15.5s</span></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>TestRolloutBadToGoodUpdate</td>
                                     <td>TestFunctionalSuite</td>
-                                    <td><span class="">15.0s</span></td>
+                                    <td><span class="">15.2s</span></td>
                                 </tr>
                                 
                                 <tr>
                                     <td>TestALBExperimentStepMultiIngress</td>
                                     <td>TestAWSSuite</td>
-                                    <td><span class="">14.8s</span></td>
-                                </tr>
-                                
-                                <tr>
-                                    <td>TestIstioHostSplitExperimentStep</td>
-                                    <td>TestIstioSuite</td>
-                                    <td><span class="">14.8s</span></td>
-                                </tr>
-                                
-                                <tr>
-                                    <td>TestIstioSubsetSplitExperimentStep</td>
-                                    <td>TestIstioSuite</td>
-                                    <td><span class="">14.6s</span></td>
-                                </tr>
-                                
-                                <tr>
-                                    <td>TestCanaryInlineAnalysis</td>
-                                    <td>TestAnalysisSuite</td>
-                                    <td><span class="">14.2s</span></td>
+                                    <td><span class="">15.1s</span></td>
                                 </tr>
                                 
                                 <tr>
                                     <td>TestALBExperimentStep</td>
                                     <td>TestAWSSuite</td>
-                                    <td><span class="">14.0s</span></td>
+                                    <td><span class="">14.7s</span></td>
                                 </tr>
                                 
                                 <tr>
-                                    <td>TestBlueGreenDuration_SupersededRollback</td>
-                                    <td>TestDurationSuite</td>
-                                    <td><span class="diff-del">14.0s</span></td>
+                                    <td>TestBlueGreenAbortAndUpdate</td>
+                                    <td>TestAnalysisSuite</td>
+                                    <td><span class="">14.3s</span></td>
                                 </tr>
                                 
                                 <tr>
-                                    <td>TestBlueGreenDuration_SupersededRollback</td>
-                                    <td>TestDurationSuite</td>
-                                    <td><span class="diff-del">14.0s</span></td>
+                                    <td>TestIstioSubsetSplitExperimentStep</td>
+                                    <td>TestIstioSuite</td>
+                                    <td><span class="">14.1s</span></td>
                                 </tr>
                                 
                                 <tr>
-                                    <td>TestALBExperimentStepNoSetWeightMultiIngress</td>
-                                    <td>TestAWSSuite</td>
-                                    <td><span class="diff-del">13.4s</span></td>
+                                    <td>TestIstioHostSplitExperimentStep</td>
+                                    <td>TestIstioSuite</td>
+                                    <td><span class="">14.1s</span></td>
                                 </tr>
                                 
                                 <tr>
-                                    <td>TestALBExperimentStepNoSetWeightMultiIngress</td>
-                                    <td>TestAWSSuite</td>
-                                    <td><span class="diff-del">13.4s</span></td>
+                                    <td>TestCanaryInlineAnalysis</td>
+                                    <td>TestAnalysisSuite</td>
+                                    <td><span class="">14.1s</span></td>
                                 </tr>
                                 
                                 <tr>
                                     <td>TestCanaryScaleDownDelayWithProgressDeadline</td>
                                     <td>TestCanarySuite</td>
-                                    <td><span class="">13.0s</span></td>
+                                    <td><span class="">14.0s</span></td>
                                 </tr>
                                 
                                 <tr>
-                                    <td>TestCanaryFailInlineMultipleAnalysis</td>
-                                    <td>TestAnalysisSuite</td>
-                                    <td><span class="">12.0s</span></td>
+                                    <td>TestALBExperimentStepNoSetWeightMultiIngress</td>
+                                    <td>TestAWSSuite</td>
+                                    <td><span class="diff-del">13.4s</span></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>TestALBExperimentStepNoSetWeightMultiIngress</td>
+                                    <td>TestAWSSuite</td>
+                                    <td><span class="diff-del">13.4s</span></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>TestALBMesh_PingPong_StableCanary_Update</td>
+                                    <td>TestAWSSuite</td>
+                                    <td><span class="">12.6s</span></td>
                                 </tr>
                                 
                                 <tr>
@@ -399,21 +411,27 @@
                                 </tr>
                                 
                                 <tr>
-                                    <td>TestALBMesh_PingPong_StableCanary_Update</td>
+                                    <td>TestIstioPingPongUpdate</td>
+                                    <td>TestIstioSuite</td>
+                                    <td><span class="">11.2s</span></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>TestCanaryFailInlineMultipleAnalysis</td>
+                                    <td>TestAnalysisSuite</td>
+                                    <td><span class="">10.9s</span></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>TestALBPingPongUpdateMultiIngress</td>
                                     <td>TestAWSSuite</td>
-                                    <td><span class="">11.5s</span></td>
+                                    <td><span class="">10.9s</span></td>
                                 </tr>
                                 
                                 <tr>
                                     <td>TestCanaryDynamicStableScaleRollbackToStable</td>
                                     <td>TestCanarySuite</td>
-                                    <td><span class="">11.4s</span></td>
-                                </tr>
-                                
-                                <tr>
-                                    <td>TestIstioHostMirrorRoute</td>
-                                    <td>TestMirrorRouteSuite</td>
-                                    <td><span class="">11.4s</span></td>
+                                    <td><span class="">10.8s</span></td>
                                 </tr>
                                 
                                 <tr>
@@ -423,15 +441,15 @@
                                 </tr>
                                 
                                 <tr>
-                                    <td>TestIstioPingPongUpdate</td>
-                                    <td>TestIstioSuite</td>
-                                    <td><span class="">10.6s</span></td>
+                                    <td>TestIstioHostMirrorRoute</td>
+                                    <td>TestMirrorRouteSuite</td>
+                                    <td><span class="">10.4s</span></td>
                                 </tr>
                                 
                                 <tr>
                                     <td>TestIstioHostHeaderRoute</td>
                                     <td>TestHeaderRoutingSuite</td>
-                                    <td><span class="">10.6s</span></td>
+                                    <td><span class="">10.3s</span></td>
                                 </tr>
                                 
                                 <tr>
@@ -441,44 +459,32 @@
                                 </tr>
                                 
                                 <tr>
-                                    <td>TestALBPingPongUpdateMultiIngress</td>
-                                    <td>TestAWSSuite</td>
-                                    <td><span class="">9.9s</span></td>
-                                </tr>
-                                
-                                <tr>
-                                    <td>TestCanaryPromoteFull</td>
-                                    <td>TestFunctionalSuite</td>
-                                    <td><span class="">9.8s</span></td>
-                                </tr>
-                                
-                                <tr>
-                                    <td>TestIstioHostSplit</td>
-                                    <td>TestIstioSuite</td>
-                                    <td><span class="">9.6s</span></td>
-                                </tr>
-                                
-                                <tr>
                                     <td>TestAnalysisWithSecret</td>
                                     <td>TestAnalysisSuite</td>
                                     <td><span class="">9.0s</span></td>
                                 </tr>
                                 
                                 <tr>
+                                    <td>TestCanaryPromoteFull</td>
+                                    <td>TestFunctionalSuite</td>
+                                    <td><span class="">8.7s</span></td>
+                                </tr>
+                                
+                                <tr>
                                     <td>TestBlueGreenExceedProgressDeadlineAbort</td>
                                     <td>TestFunctionalSuite</td>
+                                    <td><span class="">8.6s</span></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>TestIstioHostSplit</td>
+                                    <td>TestIstioSuite</td>
                                     <td><span class="">8.4s</span></td>
                                 </tr>
                                 
                                 <tr>
-                                    <td>TestCanarySetCanaryScale</td>
-                                    <td>TestCanarySuite</td>
-                                    <td><span class="">8.4s</span></td>
-                                </tr>
-                                
-                                <tr>
-                                    <td>TestCanaryDuration_RollbackOutsideWindow</td>
-                                    <td>TestDurationSuite</td>
+                                    <td>TestAlbHeaderRoute</td>
+                                    <td>TestAWSSuite</td>
                                     <td><span class="">8.3s</span></td>
                                 </tr>
                                 
@@ -489,49 +495,31 @@
                                 </tr>
                                 
                                 <tr>
-                                    <td>TestEphemeralMetadata</td>
-                                    <td>TestBlueGreenSuite</td>
-                                    <td><span class="">7.6s</span></td>
-                                </tr>
-                                
-                                <tr>
-                                    <td>TestAlbHeaderRoute</td>
-                                    <td>TestAWSSuite</td>
-                                    <td><span class="">7.6s</span></td>
-                                </tr>
-                                
-                                <tr>
                                     <td>TestRolloutWithExperimentAndAnalysis</td>
                                     <td>TestExperimentSuite</td>
-                                    <td><span class="">7.4s</span></td>
+                                    <td><span class="">8.1s</span></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>TestEphemeralMetadata</td>
+                                    <td>TestBlueGreenSuite</td>
+                                    <td><span class="">7.8s</span></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>TestBackgroundAnalysisWithArgs</td>
+                                    <td>TestAnalysisSuite</td>
+                                    <td><span class="">7.6s</span></td>
                                 </tr>
                                 
                                 <tr>
                                     <td>TestBlueGreenPromoteFull</td>
                                     <td>TestFunctionalSuite</td>
-                                    <td><span class="">7.2s</span></td>
+                                    <td><span class="">7.3s</span></td>
                                 </tr>
                                 
                                 <tr>
-                                    <td>TestScaleDownOnSuccess</td>
-                                    <td>TestFunctionalSuite</td>
-                                    <td><span class="">7.2s</span></td>
-                                </tr>
-                                
-                                <tr>
-                                    <td>TestScaleDownProgressively</td>
-                                    <td>TestFunctionalSuite</td>
-                                    <td><span class="">7.1s</span></td>
-                                </tr>
-                                
-                                <tr>
-                                    <td>TestRolloutAbortRetryPromote</td>
-                                    <td>TestFunctionalSuite</td>
-                                    <td><span class="">7.1s</span></td>
-                                </tr>
-                                
-                                <tr>
-                                    <td>TestCanaryScaleDownOnAbortNoTrafficRouting</td>
+                                    <td>TestCanaryScaleDownOnAbort</td>
                                     <td>TestCanarySuite</td>
                                     <td><span class="">7.0s</span></td>
                                 </tr>
@@ -543,15 +531,15 @@
                                 </tr>
                                 
                                 <tr>
-                                    <td>TestBackgroundAnalysisWithArgs</td>
-                                    <td>TestAnalysisSuite</td>
+                                    <td>TestScaleDownOnSuccess</td>
+                                    <td>TestFunctionalSuite</td>
                                     <td><span class="">7.0s</span></td>
                                 </tr>
                                 
                                 <tr>
-                                    <td>TestBlueGreenDuration_RollbackOutsideWindow</td>
-                                    <td>TestDurationSuite</td>
-                                    <td><span class="">6.8s</span></td>
+                                    <td>TestScaleDownProgressively</td>
+                                    <td>TestFunctionalSuite</td>
+                                    <td><span class="">7.0s</span></td>
                                 </tr>
                                 
                                 <tr>
@@ -561,32 +549,32 @@
                                 </tr>
                                 
                                 <tr>
-                                    <td>TestBlueGreenScaleDownDelay</td>
-                                    <td>TestFunctionalSuite</td>
+                                    <td>TestIstioSubsetSplit</td>
+                                    <td>TestIstioSuite</td>
                                     <td><span class="">6.8s</span></td>
                                 </tr>
                                 
                                 <tr>
-                                    <td>TestIstioSubsetSplit</td>
-                                    <td>TestIstioSuite</td>
+                                    <td>TestCanarySetCanaryScale</td>
+                                    <td>TestCanarySuite</td>
+                                    <td><span class="">6.8s</span></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>TestBlueGreenScaleDownDelay</td>
+                                    <td>TestFunctionalSuite</td>
                                     <td><span class="">6.7s</span></td>
                                 </tr>
                                 
                                 <tr>
-                                    <td>TestIstioAbortUpdateDeleteAllCanaryPods</td>
-                                    <td>TestIstioSuite</td>
-                                    <td><span class="">6.6s</span></td>
+                                    <td>TestRolloutAbortRetryPromote</td>
+                                    <td>TestFunctionalSuite</td>
+                                    <td><span class="">6.3s</span></td>
                                 </tr>
                                 
                                 <tr>
                                     <td>TestBlueGreenPreviewReplicaCountPromoteFull</td>
                                     <td>TestFunctionalSuite</td>
-                                    <td><span class="">6.4s</span></td>
-                                </tr>
-                                
-                                <tr>
-                                    <td>TestCanaryScaleDownOnAbort</td>
-                                    <td>TestCanarySuite</td>
                                     <td><span class="">6.3s</span></td>
                                 </tr>
                                 
@@ -603,45 +591,63 @@
                                 </tr>
                                 
                                 <tr>
-                                    <td>TestCanaryDuration_RollbackInsideWindow</td>
+                                    <td>TestCanaryDuration_RollbackOutsideWindow</td>
                                     <td>TestDurationSuite</td>
                                     <td><span class="">6.1s</span></td>
                                 </tr>
                                 
                                 <tr>
-                                    <td>TestBlueGreenDuration_SpecPaused</td>
-                                    <td>TestDurationSuite</td>
-                                    <td><span class="">6.1s</span></td>
+                                    <td>TestCanaryScaleDownOnAbortNoTrafficRouting</td>
+                                    <td>TestCanarySuite</td>
+                                    <td><span class="">6.0s</span></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>TestIstioAbortUpdateDeleteAllCanaryPods</td>
+                                    <td>TestIstioSuite</td>
+                                    <td><span class="">5.8s</span></td>
                                 </tr>
                                 
                                 <tr>
                                     <td>TestCanaryDuration_Retry</td>
                                     <td>TestDurationSuite</td>
-                                    <td><span class="">6.0s</span></td>
+                                    <td><span class="">5.7s</span></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>TestBlueGreenDuration_SpecPaused</td>
+                                    <td>TestDurationSuite</td>
+                                    <td><span class="">5.5s</span></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>TestBlueGreenDuration_RollbackOutsideWindow</td>
+                                    <td>TestDurationSuite</td>
+                                    <td><span class="">5.3s</span></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>TestCanaryDuration_RollbackInsideWindow</td>
+                                    <td>TestDurationSuite</td>
+                                    <td><span class="">5.2s</span></td>
                                 </tr>
                                 
                                 <tr>
                                     <td>TestCanaryDuration_SpecPaused</td>
                                     <td>TestDurationSuite</td>
-                                    <td><span class="">5.9s</span></td>
+                                    <td><span class="">5.2s</span></td>
                                 </tr>
                                 
                                 <tr>
-                                    <td>TestIstioHostSplitOnlyTls</td>
-                                    <td>TestIstioSuite</td>
-                                    <td><span class="">5.4s</span></td>
-                                </tr>
-                                
-                                <tr>
-                                    <td>TestIstioSubsetSplitSingleRoute</td>
-                                    <td>TestIstioSuite</td>
-                                    <td><span class="">5.1s</span></td>
+                                    <td>TestBlueGreenDuration_Retry</td>
+                                    <td>TestDurationSuite</td>
+                                    <td><span class="">5.0s</span></td>
                                 </tr>
                                 
                                 <tr>
                                     <td>TestCanaryDuration_IndefinitePauseStep</td>
                                     <td>TestDurationSuite</td>
-                                    <td><span class="">5.1s</span></td>
+                                    <td><span class="">5.0s</span></td>
                                 </tr>
                                 
                             
