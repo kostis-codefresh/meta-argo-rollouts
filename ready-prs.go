@@ -11,7 +11,7 @@ import (
 
 const perPageMax = 100
 
-// readyPRRow is one open PR with no merge conflicts, no failing checks
+// readyPRRow is one open, non-draft PR with no merge conflicts, no failing checks
 // (checks still in progress don't block it), and no approval yet (a PR with
 // changes requested is excluded too, unless the author has since
 // re-requested review from the same reviewer who requested changes).
@@ -25,7 +25,7 @@ type readyPRRow struct {
 	Deletions int
 }
 
-// collectReadyPRRows fetches all open PRs and keeps only those with no merge
+// collectReadyPRRows fetches all open PRs and keeps only non-drafts with no merge
 // conflicts, no failing checks (checks still in progress don't block it),
 // and no approval yet (a PR with changes requested is excluded too, unless
 // the author has since re-requested review from the same reviewer who
@@ -40,6 +40,9 @@ func collectReadyPRRows(ctx context.Context, client *github.Client) []readyPRRow
 
 	var rows []readyPRRow
 	for _, pr := range prs {
+		if pr.GetDraft() {
+			continue
+		}
 		full, ready := checkReadyToMerge(ctx, client, pr)
 		if !ready {
 			continue
